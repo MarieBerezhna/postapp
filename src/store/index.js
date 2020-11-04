@@ -6,7 +6,8 @@ import Vue from 'vue';
 Vue.use(Vuex);
 //to handle state
 const state = {
-    posts: []
+    posts: [],
+    user: null
 };
 
 //to handle state

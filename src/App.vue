@@ -1,17 +1,19 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <MainFeed/>
+  <div id="app" class="container-fluid">
+
+    <TopMenu/>
+    
+     <router-view class="col-12 col-md-9 mx-auto"/>
   </div>
 </template>
 
 <script>
-import MainFeed from './components/MainFeed.vue'
+import TopMenu from './components/TopMenu.vue'
 
 export default {
   name: 'App',
   components: {
-    MainFeed
+    TopMenu
   }
 }
 </script>
@@ -21,8 +23,10 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  padding: 0;
+}
+ul {
+  list-style: none;
 }
 </style>

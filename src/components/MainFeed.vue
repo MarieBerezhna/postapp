@@ -13,7 +13,6 @@ export default {
   name: 'HelloWorld',
   computed: {
     posts () {
-      console.log(this.$store.state.posts);
       return this.$store.state.posts;
     }
   },
