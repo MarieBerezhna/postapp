@@ -24,7 +24,14 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  padding: 0;
+
+}
+.container-fluid {
+      padding: 0 !important;
+}
+.row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 ul {
   list-style: none;
