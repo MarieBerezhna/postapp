@@ -1,8 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import MainFeed from '@/components/MainFeed.vue';
-// const Login = () => import('@/components/account/LoginPage')
-// const Register = () => import('@/components/account/RegisterPage')
+import MainFeed from '@/views/Feed.vue';
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -10,6 +9,11 @@ const routes = [
     path: '/',
     name: 'Home',
     component: MainFeed
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: () => import('@/views/Dashboard')
   }
 ];
 

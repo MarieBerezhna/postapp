@@ -41,6 +41,5 @@ export default {
             height: 300px;
             background-position: left;
         }
-
     }
 </style>

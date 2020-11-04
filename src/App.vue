@@ -4,16 +4,19 @@
     <TopMenu/>
     
      <router-view class="col-12 col-md-9 mx-auto"/>
+     <MainFooter />
   </div>
 </template>
 
 <script>
 import TopMenu from './components/TopMenu.vue'
+import MainFooter from './components/MainFooter.vue'
 
 export default {
   name: 'App',
   components: {
-    TopMenu
+    TopMenu,
+    MainFooter
   }
 }
 </script>
