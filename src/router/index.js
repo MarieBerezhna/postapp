@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import MainFeed from '@/views/Feed.vue';
-
+const dashboard = () => import('@/views/Dashboard');
 Vue.use(VueRouter);
 
 const routes = [
@@ -13,7 +13,7 @@ const routes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: () => import('@/views/Dashboard')
+    component: dashboard
   }
 ];
 

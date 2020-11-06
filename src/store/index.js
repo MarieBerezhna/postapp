@@ -6,7 +6,7 @@ import Vue from 'vue';
 Vue.use(Vuex);
 //to handle state
 const state = {
-    posts: [],
+    data: {},
     user: null
 };
 
@@ -15,18 +15,25 @@ const getters = {};
 
 //to handle actions
 const actions = {
-    getPosts({ commit }) {
-        axios.get('http://localhost:3000/api/posts')
-        .then(response => {
-        commit('SET_POSTS', response.data.data);
+    // getPosts({ commit }) {
+    //     axios.get('http://localhost:3000/api/posts')
+    //     .then(response => {
+    //     commit('SET_POSTS', response.data.data);
+    //     });
+    // }
+    getData({ commit }) {
+        axios.get('http://localhost:3000/api/init')
+            .then(response => {
+                console.log(response.data.data);
+        commit('SET_DATA', response.data.data);
         });
     }
 };
 
 //to handle mutations
 const mutations = {
-    SET_POSTS(state, posts) {
-        state.posts = posts;
+    SET_DATA(state, data) {
+        state.data = data;
     }
 };
 

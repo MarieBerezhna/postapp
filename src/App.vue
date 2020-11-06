@@ -1,9 +1,9 @@
 <template>
   <div id="app" class="container-fluid">
 
-    <TopMenu/>
+    <TopMenu class="mb-2"/>
     
-     <router-view class="col-12 col-md-9 mx-auto"/>
+     <router-view class="router-view"/>
      <MainFooter />
   </div>
 </template>
@@ -17,6 +17,9 @@ export default {
   components: {
     TopMenu,
     MainFooter
+  },
+  mounted () {
+    this.$store.dispatch("getData");
   }
 }
 </script>
@@ -36,7 +39,22 @@ export default {
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
-ul {
-  list-style: none;
+h3 {
+  margin: 40px 0 0;
 }
+ul {
+ list-style: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+.router-view {
+  height: auto;
+  min-height: 100vh;
+} 
 </style>
