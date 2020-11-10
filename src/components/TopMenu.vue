@@ -26,17 +26,19 @@
                             <router-link to="/dashboard" tag="li">Dashboard</router-link>
                         </ul>
                     </div>
-                    <div class="collapse navbar-collapse position-absolute" id="navbarNav">
+                    <!-- <div class="collapse navbar-collapse position-absolute" id="navbarNav">
                         <ul class="navbar-nav bg-light">
-                            <li class="nav-item active">
-                                <a class="nav-link" href="#">All</a>
+                            <li class="nav-item active" @click="filterCats($event)">
+                                <a class="nav-link" href="#" data-category=0 >All</a>
                             </li>
-                            <li class="nav-item" v-for="cat in categories" :key="cat.name">
-                                <a class="nav-link" href="#">{{ cat.name }}</a>
+                            <li class="nav-item" v-for="cat in categories" :key="cat.id"
+                            @click="filterCats($event)" >
+                                <a class="nav-link" :data-category="cat.id"
+                                 href="#">{{ cat.name }}</a>
                             </li>
 
                         </ul>
-                    </div>
+                    </div> -->
                 </nav>
             </div>
         </div>
@@ -46,16 +48,10 @@
 <script>
     import $ from 'jquery';
     export default {
-        data() {
-            return {    
-                
-            }
-        },
         computed: {
-            categories () {
-                //let cats = this.$store.state.data.cats;
-                return this.$store.state.data.cats; 
-            }
+            // categories () {
+            //     return this.$store.state.data.cats; 
+            // }
         },
         methods: {
             toggleAdminMenu(e) {
@@ -64,14 +60,11 @@
                 $(id + ':visible') ? $(id).removeClass('collapse') : $(id).addClass('collapse');
                 console.log(id);
             }
-        },
-        mounted() {
-            // this.categories = 
         }
     }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     ul {
         z-index: 1;
     }
@@ -125,7 +118,7 @@
             .navbar-nav {
                 position: absolute !important;
                 right: 0;
-                top: 100px;
+                top: -80px;
                 border: 2px solid #F2BD00;
 
                 .nav-item {

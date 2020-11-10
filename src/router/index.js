@@ -1,7 +1,11 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import MainFeed from '@/views/Feed.vue';
-const dashboard = () => import('@/views/Dashboard');
+const Dashboard = () => import('@/views/Dashboard');
+const Login = () => import('@/views/user/Login');
+import store from '@/store';
+const user = store.state.user;
+console.log(user);
 Vue.use(VueRouter);
 
 const routes = [
@@ -13,7 +17,10 @@ const routes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: dashboard
+    component: user !== null ? Dashboard : Login,
+        meta: {
+        requiresAuth: true
+    }
   }
 ];
 
