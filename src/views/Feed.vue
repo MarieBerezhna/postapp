@@ -14,7 +14,8 @@
     </nav>
     <div class="row">
       <div class="col-12 col-md-7">
-        <div v-for='post in posts' :key='post.id' class="border my-2 p-3 post" :data-category="post.cat">
+        <div v-for='post in posts' :key='post.id' class="border my-2 p-3 post" 
+        :data-category="post.cat" :data-id="post.id">
           <h3 class="p-3 mb-0 bg-warning text-bold">{{post.heading}}</h3>
           <div class="row">
             <div class="col-12 col-md-6 p-0">
@@ -36,7 +37,12 @@
               {{ shortenText(post.text) }}
             </div>
           </div>
-          <div @click="expandText($event)" class="btn btn-success mx-auto my-3">Read more</div>
+          <div class="row">
+            <div class="col-12 hidden">
+
+            </div>
+          </div>
+          <div @click="expandText($event, post.id)" class="btn btn-success mx-auto my-3">Read more</div>
           <!-- 
             <div v-if="post.origin" class="text-center">
                 <a class=" text-warning" :href="post.origin">See original post</a> 
@@ -95,16 +101,20 @@
       },
       shortenText: function (text) {
         let dots = '<span class="shortening-dots">...</span>';
-        let visible = '<span>' + text.slice(0, 300) + dots + ' </span>';
-        let hidden = '<span class="text-hidden d-none">' + text.slice(300) + ' </span>';
-        return visible + hidden;
+        let index = text.indexOf('<br>');
+        let visible = '<span class="shortened-text">' + text.slice(0, index) + dots + ' </span>';
+
+        return visible;
       },
-      expandText: function (e) {
-        let post = $(e.target).parent();
-        post = post[0];
-        let dots = $(post).find('.shortening-dots');
+      expandText: function (e, id) {
+        let postDiv = $(e.target).parent()[0];
+        let dots = $(postDiv).find('.shortening-dots');
         $(dots).remove();
-        // let hidden = $(post).find('.text-hidden').text();
+        let post = this.posts.filter(post => post.id === id );
+        let text = post[0].text;
+        text = text.slice(text.indexOf('<br>'));
+        $(postDiv).find('.hidden').html(text);
+        
       },
       getCatName: function (catId) {
         let cat = this.$store.state.data.cats.filter(cat => cat.id === catId);
