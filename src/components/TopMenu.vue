@@ -48,11 +48,6 @@
 <script>
     import $ from 'jquery';
     export default {
-        computed: {
-            // categories () {
-            //     return this.$store.state.data.cats; 
-            // }
-        },
         methods: {
             toggleAdminMenu(e) {
                 e.preventDefault();
@@ -100,7 +95,8 @@
             height: auto;
             min-height: 70vh;
             padding-left: 20vw;
-            padding-top: 20vh;
+            padding-top: 10vh;
+            margin-top: 150px;
             position: relative;
         }
     }

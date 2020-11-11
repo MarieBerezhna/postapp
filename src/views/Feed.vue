@@ -14,8 +14,8 @@
     </nav>
     <div class="row">
       <div class="col-12 col-md-7">
-        <div v-for='post in posts' :key='post.id' class="border my-2 p-3 post" 
-        :data-category="post.cat" :data-id="post.id">
+        <div v-for='post in posts' :key='post.id' class="border my-2 p-3 post" :data-category="post.cat"
+          :data-id="post.id">
           <h3 class="p-3 mb-0 bg-warning text-bold">{{post.heading}}</h3>
           <div class="row">
             <div class="col-12 col-md-6 p-0">
@@ -33,16 +33,19 @@
               </div>
 
             </div>
-            <div class="col-12 col-md-6 post-text">
+            <div class="col-12 col-md-6 p-3 post-text text-justify">
               {{ shortenText(post.text) }}
             </div>
           </div>
           <div class="row">
-            <div class="col-12 hidden">
+            <div class="col-12 hidden text-justify">
 
             </div>
           </div>
-          <div @click="expandText($event, post.id)" class="btn btn-success mx-auto my-3">Read more</div>
+          <div class="row">
+              <div @click="toggleText($event, post.id)" class="btn btn-success mx-auto my-3 col-10 col-md-4">Read more</div>
+          </div>
+         
           <!-- 
             <div v-if="post.origin" class="text-center">
                 <a class=" text-warning" :href="post.origin">See original post</a> 
@@ -103,18 +106,22 @@
         let dots = '<span class="shortening-dots">...</span>';
         let index = text.indexOf('<br>');
         let visible = '<span class="shortened-text">' + text.slice(0, index) + dots + ' </span>';
-
         return visible;
       },
-      expandText: function (e, id) {
-        let postDiv = $(e.target).parent()[0];
-        let dots = $(postDiv).find('.shortening-dots');
-        $(dots).remove();
-        let post = this.posts.filter(post => post.id === id );
-        let text = post[0].text;
-        text = text.slice(text.indexOf('<br>'));
-        $(postDiv).find('.hidden').html(text);
-        
+      toggleText: function (e, id) {
+        let postDiv = $(e.target).parent().parent()[0];
+        if ($(postDiv).find('.hidden').length) {
+          let dots = $(postDiv).find('.shortening-dots');
+          $(dots).remove();
+          let post = this.posts.filter(post => post.id === id);
+          let text = post[0].text;
+          text = text.slice(text.indexOf('<br>'));
+          $(postDiv).find('.hidden').removeClass('hidden').addClass('expanded').html(text);
+          $(e.target).text('Hide');
+        } else {
+          $(postDiv).find('.expanded').removeClass('expanded').addClass('hidden').empty();
+          $(e.target).text('Read more');
+        }
       },
       getCatName: function (catId) {
         let cat = this.$store.state.data.cats.filter(cat => cat.id === catId);
@@ -139,4 +146,5 @@
   }
 </script>
 <style scoped>
+
 </style>
