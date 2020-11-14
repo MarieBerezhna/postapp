@@ -2,7 +2,6 @@
   <div id="app" class="container-fluid">
 
     <TopMenu class="mb-2"/>
-    
      <router-view class="router-view"/>
      <MainFooter />
   </div>
@@ -20,17 +19,17 @@ export default {
   },
   mounted () {
     this.$store.dispatch("getData");
-  }
+  },
 }
 </script>
 
-<style>
+<style lang="scss">
+$yellow: #F2BD00;
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-
 }
 .container-fluid {
       padding: 0 !important;
@@ -47,7 +46,7 @@ ul {
   padding: 0;
 }
 li {
-  display: inline-block;
+  // display: inline-block;
   margin: 0 10px;
 }
 a {
@@ -55,6 +54,12 @@ a {
 }
 .router-view {
   height: auto;
-  min-height: 100vh;
-} 
+  min-height: 80vh;
+}
+
+//colors:
+
+.btn[type="submit"] {
+  background-color: $yellow;
+}
 </style>

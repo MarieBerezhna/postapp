@@ -22,23 +22,12 @@
                         </button>
                     </div>
                     <div class="collapse position-absolute" id="adminNav">
-                        <ul class="bg-light">
-                            <router-link to="/dashboard" tag="li">Dashboard</router-link>
+                        <ul class="bg-light rounded">
+                            <router-link v-if="isLoggedIn" to="/dashboard" tag="li" class="border-bottom">Dashboard</router-link>
+                            <router-link v-if="!isLoggedIn" to="/login" tag="li">Log in</router-link>
+                            <li v-if="isLoggedIn"><a  @click="logout">Logout</a></li>
                         </ul>
                     </div>
-                    <!-- <div class="collapse navbar-collapse position-absolute" id="navbarNav">
-                        <ul class="navbar-nav bg-light">
-                            <li class="nav-item active" @click="filterCats($event)">
-                                <a class="nav-link" href="#" data-category=0 >All</a>
-                            </li>
-                            <li class="nav-item" v-for="cat in categories" :key="cat.id"
-                            @click="filterCats($event)" >
-                                <a class="nav-link" :data-category="cat.id"
-                                 href="#">{{ cat.name }}</a>
-                            </li>
-
-                        </ul>
-                    </div> -->
                 </nav>
             </div>
         </div>
@@ -48,13 +37,36 @@
 <script>
     import $ from 'jquery';
     export default {
+        computed: {
+            isLoggedIn: function () {
+                return this.$store.getters.isLoggedIn
+            }
+        },
         methods: {
             toggleAdminMenu(e) {
                 e.preventDefault();
                 var id = $(e.target).parent().attr('data-target');
                 $(id + ':visible') ? $(id).removeClass('collapse') : $(id).addClass('collapse');
-                console.log(id);
+            },
+            logout: function () {
+                this.$store.dispatch('logout')
+                    .then(() => {
+                        this.$router.push('/login').catch(() => {});
+                    })
+                $('.admin')[0].click();
+                // this.$store.getters.isLoggedIn = false;
             }
+        },
+        created() {
+            this.$http.interceptors.response.use(undefined, function (err) {
+                return new Promise(function (resolve, reject) {
+                    console.log(resolve, reject);
+                    if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+                        this.$store.dispatch('logout');
+                    }
+                    throw err;
+                });
+            });
         }
     }
 </script>
@@ -62,6 +74,9 @@
 <style lang="scss">
     ul {
         z-index: 1;
+        li {
+            cursor: pointer;
+        }
     }
 
 

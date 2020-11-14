@@ -140,8 +140,6 @@
           $(body).html(text);
         });
       }, 500);
-
-
     }
   }
 </script>
