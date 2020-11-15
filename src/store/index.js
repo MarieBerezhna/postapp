@@ -11,7 +11,7 @@ const state = {
     authStatus: '',
     data: {},
     token: localStorage.getItem('token') || '',
-    user: {}
+    user: JSON.parse(localStorage.getItem('user')) || {}
 };
 
 //to handle state
@@ -25,7 +25,6 @@ const actions = {
     getData({
         commit
     }) {
-        // axios.get('http://localhost:3000/api/init')
         axios.get(`${apiBase}/init`)
             .then(response => {
                 commit('SET_DATA', response.data.data);
@@ -45,6 +44,7 @@ const actions = {
                     const token = resp.data.data.token;
                     const user = resp.data.data.user;
                     localStorage.setItem('token', token);
+                    localStorage.setItem('user', user);
                     axios.defaults.headers.common.Authorization = token;
                     commit('auth_success', token, user);
                     resolve(resp);
@@ -52,6 +52,8 @@ const actions = {
                 .catch(err => {
                     commit('auth_error', err);
                     localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    console.log(err);
                     reject(err);
                 });
         });
@@ -70,6 +72,7 @@ const actions = {
                     const token = resp.data.data.token;
                     const user = resp.data.data.user;
                     localStorage.setItem('token', token);
+                    localStorage.setItem('user', JSON.stringify(user));
                     axios.defaults.headers.common.Authorization = token;
                     let data = {
                         token,
@@ -117,6 +120,7 @@ const mutations = {
     logout(state) {
         state.authStatus = '';
         state.token = '';
+        console.log('logged out');
     },
 };
 

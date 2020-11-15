@@ -12,6 +12,13 @@ if (token) {
   Vue.prototype.$http.defaults.headers.common.Authorization = token;
 }
 Vue.config.productionTip = false;
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faFacebookF, faLinkedinIn, faWhatsapp, faInstagram, faGithub } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faFacebookF, faLinkedinIn, faWhatsapp, faInstagram, faGithub, faEdit );
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 new Vue({
   router,

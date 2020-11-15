@@ -55,7 +55,7 @@
                         email,
                         password
                     })
-                    .then(() => this.$router.push('/'))
+                    .then(() => this.$router.push('/dashboard'))
                     .catch(err => console.log(err))
             },
             register: function () {
@@ -63,6 +63,8 @@
                     email: this.email,
                     password: this.password
                 }
+                if (data.password !== this.password_confirmation) return false;
+                
                 this.$store.dispatch('register', data)
                     .then(() => this.$router.push('/'))
                     .catch(err => console.log(err))
