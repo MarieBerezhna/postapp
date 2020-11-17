@@ -11,7 +11,7 @@ const state = {
     authStatus: '',
     data: {},
     token: localStorage.getItem('token') || '',
-    user: JSON.parse(localStorage.getItem('user')) || {}
+    user: {}
 };
 
 //to handle state
@@ -30,6 +30,23 @@ const actions = {
                 commit('SET_DATA', response.data.data);
             });
     },
+    update_user({ commit }, user) {
+        return new Promise((resolve, reject) => {
+    
+            axios({
+                url: `${apiBase}/users/${user.id}`,
+                data: user,
+                method: 'PUT'
+            }).then(resp => {
+                const user = resp.data.user;
+                commit('update_user', user);
+                localStorage.setItem('user', JSON.stringify(user));
+                resolve(resp);
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    },
     register({
         commit
     }, user) {
@@ -44,7 +61,7 @@ const actions = {
                     const token = resp.data.data.token;
                     const user = resp.data.data.user;
                     localStorage.setItem('token', token);
-                    localStorage.setItem('user', user);
+                    localStorage.setItem('user', JSON.stringify(user));
                     axios.defaults.headers.common.Authorization = token;
                     commit('auth_success', token, user);
                     resolve(resp);
@@ -69,6 +86,7 @@ const actions = {
                     method: 'POST'
                 })
                 .then(resp => {
+
                     const token = resp.data.data.token;
                     const user = resp.data.data.user;
                     localStorage.setItem('token', token);
@@ -83,6 +101,7 @@ const actions = {
                 })
                 .catch(err => {
                     commit('auth_error');
+                    localStorage.removeItem('user');
                     localStorage.removeItem('token');
                     reject(err);
                 });
@@ -104,6 +123,9 @@ const actions = {
 const mutations = {
     SET_DATA(state, data) {
         state.data = data;
+    },
+    update_user(state, user) {
+        state.user = user;
     },
     auth_request(state) {
         state.authStatus = 'loading';

@@ -63,8 +63,9 @@
                     email: this.email,
                     password: this.password
                 }
-                if (data.password !== this.password_confirmation) return false;
-                
+                if (data.password !== this.password_confirmation) {
+                    console.log('wtf')
+                }                
                 this.$store.dispatch('register', data)
                     .then(() => this.$router.push('/'))
                     .catch(err => console.log(err))

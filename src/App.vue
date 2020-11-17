@@ -69,7 +69,9 @@ a {
   height: auto;
   min-height: 80vh;
 }
-
+textarea {
+  resize: none !important;
+}
 //colors:
 
 .btn[type="submit"] {
