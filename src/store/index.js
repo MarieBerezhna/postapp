@@ -30,6 +30,15 @@ const actions = {
                 commit('SET_DATA', response.data.data);
             });
     },
+    create_post({ commit }, post) {
+        axios({
+            url: `${apiBase}/posts`,
+            data: post,
+            method: 'POST'
+        }).then(resp => {
+            commit('new_post', resp.data);
+        });
+    },
     update_user({ commit }, user) {
         return new Promise((resolve, reject) => {
     
@@ -123,6 +132,9 @@ const actions = {
 const mutations = {
     SET_DATA(state, data) {
         state.data = data;
+    },
+    new_post(state, data) {
+        console.log(data);
     },
     update_user(state, user) {
         state.user = user;

@@ -22,7 +22,8 @@
               <img :src="post.image" :alt="post.tags" width="100%">
               <div class="meta">
                 <span class="text-danger post-category" :data-id="post.cat">
-                  {{ getCatName(post.cat) }}
+                  <!-- {{ getCatName(post.cat) }} -->
+                  {{ getCat(post.cat) }}
                 </span>
                 <span v-for="tag in parseTags(post.tags)" :key="tag.index" class="text-success">
                   #{{ tag }}
@@ -59,6 +60,8 @@
 </template>
 
 <script>
+import getCat from '../utils/getCatName';
+import formatDateTime from '../utils/formatDateTime';
   import $ from 'jquery';
   export default {
     name: 'HelloWorld',
@@ -71,6 +74,9 @@
       }
     },
     methods: {
+      getCat(cat) {
+        return getCat(this.$store.state.data.cats, cat)
+      },
       filterCats(e) {
         e.preventDefault();
         let cat = $(e.target).attr('data-category');
@@ -97,10 +103,7 @@
         return tagsArr;
       },
       datetime: function (datetime) {
-        let timeArr = datetime.split('T');
-        let date = timeArr[0].split('-').reverse().join('/');
-        let time = timeArr[1].slice(0, 5);
-        return `${date} ${time}`;
+        return formatDateTime(datetime)
       },
       shortenText: function (text) {
         let dots = '<span class="shortening-dots">...</span>';
@@ -122,14 +125,6 @@
           $(postDiv).find('.expanded').removeClass('expanded').addClass('hidden').empty();
           $(e.target).text('Read more');
         }
-      },
-      getCatName: function (catId) {
-        let cat = this.$store.state.data.cats.filter(cat => cat.id === catId);
-        cat = cat[0];
-        if (cat) {
-          cat = JSON.parse(JSON.stringify(cat));
-        }
-        return cat ? cat.name : "";
       }
     },
     mounted() {

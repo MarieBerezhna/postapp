@@ -17,7 +17,7 @@
         <form action="">
           <div class="form-group">
             <label for=""></label>
-            <input type="text" placeholder="Heading (optional)" class="form-control">
+            <input type="text" v-model="heading" placeholder="Heading (optional)" class="form-control">
             </div>
           <div class="form-group">
             <label for=""></label>
@@ -31,7 +31,7 @@
           <div class="form-group">
             <label for="categories">Category</label>
 
-            <select name="category" class="browser-default custom-select">
+            <select name="category" id="cats" class="browser-default custom-select">
               <option value="0">Uncategorized</option>
               <option v-for="cat in cats" :key="cat.id" :value="cat.id">
                 {{ cat.name }}
@@ -42,7 +42,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-primary" @click="createPost()" data-dismiss="modal">Save changes</button>
       </div>
     </div>
   </div>
@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import $ from 'jquery';
     export default {
         data () {
           return {
@@ -80,17 +81,15 @@
               heading: this.heading,
               text: this.text,
               image: this.image,
-              category: this.category,
+              cat: $('#cats').children("option:selected").val(),
               origin: this.origin,
               tags: this.tags,
               user_id: this.user.id
             }
-            console.log(post);
+           console.log(post);
+            this.$store.dispatch('create_post', post)
+                    .catch(err => console.log(err))
           }
-        },
-        mounted () {
-          console.log(this.$store.state.data.cats)
-          this.createPost()
         }
     }
 </script>

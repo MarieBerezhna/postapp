@@ -3,8 +3,6 @@
 
     <TopMenu class="mb-2"/>
      <router-view class="router-view"/>
-             <!-- Button trigger modal -->
-
       <CreatePost/>
      <MainFooter />
   </div>
@@ -64,7 +62,6 @@ ul {
   padding: 0;
 }
 li {
-  // display: inline-block;
   margin: 0 10px;
 }
 a {
@@ -72,7 +69,7 @@ a {
 }
 .router-view {
   height: auto;
-  min-height: 80vh;
+  min-height: 70vh;
 }
 textarea {
   resize: none !important;
