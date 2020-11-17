@@ -116,8 +116,9 @@
                     $('#user-bio').text($('textarea').val()).slideDown();
                     
                     console.log($('#username').val());
-                    this.updateUser();
                     // deletes username wtf?
+                    this.updateUser();
+                    
 
 
                 } else {

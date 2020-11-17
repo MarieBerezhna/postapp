@@ -3,6 +3,9 @@
 
     <TopMenu class="mb-2"/>
      <router-view class="router-view"/>
+             <!-- Button trigger modal -->
+
+      <CreatePost/>
      <MainFooter />
   </div>
 </template>
@@ -10,12 +13,14 @@
 <script>
 import TopMenu from './components/TopMenu.vue'
 import MainFooter from './components/MainFooter.vue'
+import CreatePost from './components/CreatePost'
 
 export default {
   name: 'App',
   components: {
     TopMenu,
-    MainFooter
+    MainFooter,
+    CreatePost
   },
   mounted () {
     this.$store.dispatch("getData");
