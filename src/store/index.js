@@ -117,7 +117,10 @@ const actions = {
                 .then(resp => {
 
                     const token = resp.data.data.token;
-                    const user = resp.data.data.user;
+                    let user = resp.data.data.user;
+                    if (user.image) {
+                        user.image = `${apiBase}/users/avatar/${user.id}/${user.image}`;
+                    }
                     localStorage.setItem('token', token);
                     localStorage.setItem('user', JSON.stringify(user));
                     axios.defaults.headers.common.Authorization = token;

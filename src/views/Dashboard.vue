@@ -144,6 +144,7 @@
             avatarUpload() {
                 this.$store.dispatch('update_avatar', this.user.id)
                     .then(resp => {
+                        this.user.image = resp.data.path;
                         console.log(resp);
                     })
                     .catch(err => console.log(err))
@@ -164,7 +165,6 @@
                     $('textarea').text($('#user-bio').text()).slideDown();
                     $('.bio-btn').text('Save')
                 }
-
             },
             disableInputAndSend(e) {
                 $(e.target).attr('disabled', true);
