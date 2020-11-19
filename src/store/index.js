@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Vuex from 'vuex';
 import Vue from 'vue';
+
 const api = require('../../api');
 const apiBase = `${api.protocol}://${api.host}:${api.port}${api.baseUrl}`;
 
@@ -56,6 +57,25 @@ const actions = {
             });
         });
     },
+    update_avatar({ commit }, id) { 
+        return new Promise((resolve, reject) => {
+            const file = document.getElementById('image-input').files[0];
+            const fd = new FormData();
+            fd.append('0', file, file.name);
+            fd.append('user_id', id);
+            commit('new_avatar');
+
+            axios.post(`${apiBase}/users/avatar/`, fd)
+                
+                .then(resp => {
+                console.log(resp);
+                resolve(resp);
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    },
+        
     register({
         commit
     }, user) {
@@ -138,6 +158,9 @@ const mutations = {
     },
     update_user(state, user) {
         state.user = user;
+    },
+    new_avatar(state, path) {
+        state.user.image = path;
     },
     auth_request(state) {
         state.authStatus = 'loading';
