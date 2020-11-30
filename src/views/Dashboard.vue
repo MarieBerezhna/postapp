@@ -4,15 +4,15 @@
 
         <form class="user-box" v-if="Object.keys(user).length" :id="user.id" method="POST"
             enctype="multipart/form-data">
-                                    <input @change="avatarUpload($event)" type="file" id="image-input" name="avatar"
-                            accept="image/png, image/jpeg">
+            <input @change="avatarUpload($event)" type="file" id="image-input" name="avatar"
+                accept="image/png, image/jpeg">
             <div class="row">
 
                 <div class="col-12 col-md-6  text-center">
                     <div @mouseover="imgHover($event)" @mouseleave="hideImgHover($event)"
                         class="img-box border border-warning rounded-circle mb-3 mx-auto position-relative">
 
-                        <img :src="user.image? user.image : require('../assets/user.jpg')" :alt="user.name"
+                        <img :src="image? image : require('../assets/user.jpg')" :alt="user.name"
                             class="user-image img border border-warning rounded-circle" width="250" height="250"
                             :data-value="user.image">
                         <div class="img-hover bg-dark text-light position-absolute" @click="uploadOpen()"
@@ -23,26 +23,38 @@
                         </div>
                     </div>
 
-                    <div class="user-meta">
+                    <div class="user-meta ">
+
                         <textarea name="" id="" cols="5" rows="3"
                             class="hidden w-50 mx-auto border rounded md-textarea form-control"></textarea>
-                        <p v-html="bio" @click="toggleBio()">
+                        <p v-html="bio">
                         </p>
+                        
+                        <font-awesome-icon :icon="['fas', 'check']" @click="toggleBio($event)"
+                                class="position-absolute save-btn mt-1 mx-1" style="display:none"/>
+                        <font-awesome-icon :icon="['fas', 'edit']" @click="toggleBio($event)"
+                                class="position-absolute  edit-btn mt-1 mx-1" />    
                     </div>
                 </div>
                 <div class="col-12 col-md-6">
                     <div class="user-meta text-left mt-md-3 text-center">
                         <div class="form-group position-relative">
                             <label for="username"></label>
-                            <input type="text" id="username" class="w-75 w-md-100" @blur="disableInputAndSend($event)"
+                            <input type="text" id="username" class="w-75 w-md-100"
                                 :placeholder="'Usename: ' + name" :value="name" disabled>
+
+                            <font-awesome-icon :icon="['fas', 'check']" @click="disableInputAndSend($event)"
+                                class="save-btn mt-1 mx-1 position-absolute" style="right: 0; display: none" />
                             <font-awesome-icon :icon="['fas', 'edit']" @click="enableInput($event)"
                                 class="edit-btn mt-1 mx-1 position-absolute" style="right: 0" />
+                            <span class="bio-btn-text"></span>
                         </div>
                         <div class="form-group position-relative">
                             <label for="email"></label>
-                            <input type="text" id="email" class="w-75 w-md-100" @blur="disableInputAndSend($event)"
-                                :value="user.email" :placeholder="user.email" disabled required>
+                            <input type="text" id="email" class="w-75 w-md-100" :value="user.email"
+                                :placeholder="user.email" disabled required>
+                            <font-awesome-icon :icon="['fas', 'check']" @click="disableInputAndSend($event)"
+                                class="save-btn mt-1 mx-1 position-absolute" style="right: 0; display: none" />
                             <font-awesome-icon :icon="['fas', 'edit']" @click="enableInput($event)"
                                 class="edit-btn mt-1 mx-1 position-absolute" style="right: 0" />
                         </div>
@@ -60,6 +72,10 @@
                                 <br>
                                 <input type="text" @blur="hideSocInput($event.target)" @change="updateLinkValue($event)"
                                     class="soc-edit w-75  mt-3">
+                            <font-awesome-icon :icon="['fas', 'check']" @click="disableInputAndSend($event)"
+                                class="save-btn mt-1 mx-1 position-absolute" style="right: 0; display: none" />
+                            <font-awesome-icon :icon="['fas', 'edit']" @click="enableInput($event)"
+                                class="edit-btn mt-1 mx-1 position-absolute" style="right: 0" />
                             </div>
                         </div>
                         <div class="form-group row col-md-7  mx-auto">
@@ -110,23 +126,21 @@
     export default {
         data() {
             return {
-                user: JSON.parse(localStorage.getItem('user')),
-                image: {
-                    file: null,
-                    name: ''
-                }
+                user: JSON.parse(localStorage.getItem('user'))
             }
         },
         computed: {
             social_icons() {
-                return JSON.parse(this.user.social);
+                return this.user.social ? JSON.parse(this.user.social) : { "0": { "prefix": "facebook-f", "name": "Facebook", "url": "" }, "1": { "prefix": "linkedin-in", "name": "LinkedIn", "url": "" }, "2": { "prefix": "instagram", "name": "Instagram", "url": "" }, "3": { "prefix": "github", "name": "GitHub", "url": "" } }	;
             },
             name() {
                 return this.user.name ? this.user.name : 'Add username'
             },
             bio() {
-                return this.user.bio ? `<p id="user-bio">${this.user.bio}</p><a class="btn bio-btn"> Edit </a>` :
-                    '<p id="user-bio"></p><a class="btn bio-btn"> ... <br>Add bio </a>'
+                return this.user.bio ? `<p id="user-bio">${this.user.bio}</p>` : ' ... '
+            },
+            image() {
+                return this.user.image ? this.user.image : null;
             },
             posts() {
                 let posts = this.$store.state.data.posts ? this.$store.state.data.posts.filter(post => post.user_id ===
@@ -144,30 +158,38 @@
             avatarUpload() {
                 this.$store.dispatch('update_avatar', this.user.id)
                     .then(resp => {
-                        this.user.image = resp.data.path;
-                        console.log(resp);
+                        console.log('dashboard' + JSON.stringify(resp));
                     })
                     .catch(err => console.log(err))
             },
-            enableInput(e) {
-                let input = e.target.tagName === "svg" ? $(e.target).prev('input')[0] : $(e.target).parent().prev(
-                    'input')[0];
-                $(input).removeAttr('disabled');
-            },
-            toggleBio() {
+            toggleBio(e) {
+               let icon = e.target.tagName === "svg" ? e.target : $(e.target).parent();
                 if ($('textarea:visible').length) {
+                    $(icon).fadeOut();
+                    $(icon).parent().find('.edit-btn').fadeIn();
                     $('textarea').slideUp();
                     $('.bio-btn').text($('textarea').val().length ? 'Edit' : 'Add bio')
                     $('#user-bio').text($('textarea').val()).slideDown();
                     this.updateUser();
                 } else {
+                    $(icon).fadeOut();
+                    $(icon).parent().find('.save-btn').fadeIn();
                     $('#user-bio').slideUp();
                     $('textarea').text($('#user-bio').text()).slideDown();
                     $('.bio-btn').text('Save')
                 }
             },
+            enableInput(e) {
+                let icon = e.target.tagName === "svg" ? e.target : $(e.target).parent();
+                $(icon).parent().find('.save-btn').fadeIn();
+                $(icon).fadeOut();
+                $(icon).parent().find('input').removeAttr('disabled');
+            },
             disableInputAndSend(e) {
-                $(e.target).attr('disabled', true);
+                let icon = e.target.tagName === "svg" ? e.target : $(e.target).parent();
+                $(icon).fadeOut();
+                $(icon).parent().find('.edit-btn').fadeIn();
+                $(icon).parent().find('input').attr('disabled', true);
                 this.updateUser();
             },
             editSocial(e) {
@@ -190,6 +212,7 @@
             updateLinkValue(e) {
                 let val = $(e.target).val();
                 let span = $('.link[beingEdited]')[0];
+                // change colors
 
                 $(span).attr('data-value', val)
                 this.updateUser();
@@ -212,16 +235,11 @@
                     id: $('form').attr('id'),
                     name: $('#username').val(),
                     email: $('#email').val().trim(),
-                    image: this.user.image,
                     social: JSON.stringify(social),
                     bio: $('textarea').val().trim()
                 };
-                console.log(user);
 
                 this.$store.dispatch('update_user', user)
-                    .then(resp => {
-                        console.log(resp.data.user);
-                    })
                     .catch(err => console.log(err))
             },
             imgHover(e) {
@@ -247,9 +265,6 @@
             getCatName(cat_id) {
                 return getCat(this.$store.state.data.cats, cat_id);
             }
-        },
-        mounted() {
-
         }
     }
 </script>
@@ -261,7 +276,8 @@
     }
 
     .link,
-    .edit-btn {
+    .edit-btn,
+    .save-btn {
         cursor: pointer;
     }
 
@@ -274,6 +290,7 @@
         width: 250px;
         height: 250px;
         margin-top: -20%;
+        background-color: #fff;
         z-index: 1;
         cursor: pointer;
 

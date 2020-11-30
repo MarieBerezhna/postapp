@@ -1,12 +1,14 @@
 <template>
     <div class="container text-center">
         <h1>{{ heading }} </h1>
-        <form action="#" method="post" @submit.prevent="loginPage ? login() : register()"
+         <span class="text-danger"> {{ error }} </span>
+        <form action="#" method="post" @submit.prevent="formSubmit()"
             class="col-8 col-md-4 mx-auto">
             <div class="row">
                 <div class="col-12 form-group">
-                    <label for="email"></label>
+                    <label for="email"></label>   
                     <input v-model="email" type="text" class="form-control" placeholder="Email" name="email" required>
+                   
                 </div>
                 <div class="col-12 form-group">
                     <label for="psw"></label>
@@ -45,6 +47,9 @@
             },
             submitText () {
                  return this.loginPage ? "Log In" : "Sign Up";
+            },
+            error () {
+                return this.$store.state.warning;
             }
         },
         methods: {
@@ -55,7 +60,9 @@
                         email,
                         password
                     })
-                    .then(() => this.$router.push('/dashboard'))
+                    .then(() => {
+                        this.$router.push('/dashboard')
+                        })
                     .catch(err => console.log(err))
             },
             register: function () {
@@ -64,11 +71,19 @@
                     password: this.password
                 }
                 if (data.password !== this.password_confirmation) {
-                    console.log('wtf')
-                }                
+                    this.$store.state.warning = "Passwords don't match"
+                } else {
                 this.$store.dispatch('register', data)
-                    .then(() => this.$router.push('/'))
+                    .then((resp) => {
+                        console.log(resp);
+                        this.$router.push('/dashboard')
+                        })
                     .catch(err => console.log(err))
+                }              
+
+            },
+            formSubmit: function () {
+                this.loginPage ? this.login() : this.register()
             }
         }
     }

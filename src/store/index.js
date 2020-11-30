@@ -12,7 +12,8 @@ const state = {
     authStatus: '',
     data: {},
     token: localStorage.getItem('token') || '',
-    user: {}
+    user: {},
+    warning: ''
 };
 
 //to handle state
@@ -28,10 +29,14 @@ const actions = {
     }) {
         axios.get(`${apiBase}/init`)
             .then(response => {
+
+                console.log(response);
                 commit('SET_DATA', response.data.data);
             });
     },
-    create_post({ commit }, post) {
+    create_post({
+        commit
+    }, post) {
         axios({
             url: `${apiBase}/posts`,
             data: post,
@@ -40,13 +45,15 @@ const actions = {
             commit('new_post', resp.data);
         });
     },
-    update_user({ commit }, user) {
+    update_user({
+        commit
+    }, user) {
         return new Promise((resolve, reject) => {
-    
+
             axios({
                 url: `${apiBase}/users/${user.id}`,
                 data: user,
-                method: 'PUT'
+                method: 'PATCH'
             }).then(resp => {
                 const user = resp.data.user;
                 commit('update_user', user);
@@ -57,25 +64,27 @@ const actions = {
             });
         });
     },
-    update_avatar({ commit }, id) { 
+    update_avatar({
+        commit
+    }, id) {
         return new Promise((resolve, reject) => {
             const file = document.getElementById('image-input').files[0];
             const fd = new FormData();
             fd.append('0', file, file.name);
             fd.append('user_id', id);
-            commit('new_avatar');
+            commit('new_avatar', file.name);
 
             axios.post(`${apiBase}/users/avatar/`, fd)
-                
+
                 .then(resp => {
-                console.log(resp);
-                resolve(resp);
-            }).catch(err => {
-                reject(err);
-            });
+                    console.log('action:' + JSON.stringify(resp));
+                    resolve(resp);
+                }).catch(err => {
+                    reject(err);
+                });
         });
     },
-        
+
     register({
         commit
     }, user) {
@@ -87,13 +96,18 @@ const actions = {
                     method: 'POST'
                 })
                 .then(resp => {
-                    const token = resp.data.data.token;
-                    const user = resp.data.data.user;
-                    localStorage.setItem('token', token);
-                    localStorage.setItem('user', JSON.stringify(user));
-                    axios.defaults.headers.common.Authorization = token;
-                    commit('auth_success', token, user);
-                    resolve(resp);
+                    if (!resp.data.error) {
+                        const token = resp.data.data.token;
+                        const user = resp.data.data.user;
+                        localStorage.setItem('token', token);
+                        localStorage.setItem('user', JSON.stringify(user));
+                        axios.defaults.headers.common.Authorization = token;
+                        commit('auth_success', token, user);
+                        resolve(resp);
+                    } else {
+                        commit('auth_error', resp);
+                    }
+
                 })
                 .catch(err => {
                     commit('auth_error', err);
@@ -116,20 +130,23 @@ const actions = {
                 })
                 .then(resp => {
 
-                    const token = resp.data.data.token;
-                    let user = resp.data.data.user;
-                    if (user.image) {
+                    if (!resp.data.error) {
+                        const token = resp.data.data.token;
+                        let user = resp.data.data.user;
                         user.image = `${apiBase}/users/avatar/${user.id}/${user.image}`;
+                        localStorage.setItem('token', token);
+                        localStorage.setItem('user', JSON.stringify(user));
+                        axios.defaults.headers.common.Authorization = token;
+                        let data = {
+                            token,
+                            user
+                        };
+                        commit('auth_success', data);
+                        resolve(resp);
+                    } else {
+                        commit('auth_error', resp);
                     }
-                    localStorage.setItem('token', token);
-                    localStorage.setItem('user', JSON.stringify(user));
-                    axios.defaults.headers.common.Authorization = token;
-                    let data = {
-                        token,
-                        user
-                    };
-                    commit('auth_success', data);
-                    resolve(resp);
+
                 })
                 .catch(err => {
                     commit('auth_error');
@@ -160,22 +177,29 @@ const mutations = {
         console.log(data);
     },
     update_user(state, user) {
-        state.user = user;
+        let localuser = user;
+        let img = JSON.parse(localStorage.user).image;
+        localuser.image = img;
+        state.user = localuser;
     },
     new_avatar(state, path) {
-        state.user.image = path;
+        let user = JSON.parse(localStorage.user);
+        state.user.image = user.image = `${apiBase}/users/avatar/${user.id}/${path}`;
+        localStorage.user = JSON.stringify(user);
     },
     auth_request(state) {
         state.authStatus = 'loading';
     },
     auth_success(state, data) {
-        
+
         state.authStatus = 'success';
         state.token = data.token;
         state.user = data.user;
     },
-    auth_error(state) {
+    auth_error(state, resp) {
+        console.log(resp);
         state.authStatus = 'error';
+        state.warning = resp.data.message;
     },
     logout(state) {
         state.authStatus = '';
