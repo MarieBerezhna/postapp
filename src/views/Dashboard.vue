@@ -23,17 +23,17 @@
                         </div>
                     </div>
 
-                    <div class="user-meta ">
-
-                        <textarea name="" id="" cols="5" rows="3"
-                            class="hidden w-50 mx-auto border rounded md-textarea form-control"></textarea>
-                        <p v-html="bio">
-                        </p>
+                    <div class="user-meta position-relative w-75 mx-auto">
+                        <textarea name="" cols="5" rows="3"
+                            class="hidden w-75 mx-auto border rounded md-textarea form-control"></textarea>
+                        <span id="user-bio" class="w-75 mx-auto">
+                            {{ bio }}
+                        </span>
 
                         <font-awesome-icon :icon="['fas', 'check']" @click="toggleBio($event)"
-                            class="position-absolute save-btn mt-1 mx-1" style="display:none" />
+                            class="position-absolute save-btn mt-1 mx-1" style="right:0;display:none" />
                         <font-awesome-icon :icon="['fas', 'edit']" @click="toggleBio($event)"
-                            class="position-absolute  edit-btn mt-1 mx-1" />
+                            class="position-absolute  edit-btn mt-1 mx-1" style="right:0;"/>
                     </div>
                 </div>
                 <div class="col-12 col-md-6">
@@ -78,9 +78,6 @@
                                         class="save-btn mt-1 mx-1 position-absolute"
                                          style="right: 0;" title="Save"/>
                                 </div>
-
-
-
                             </div>
                         </div>
                         <div class="form-group row col-md-7  mx-auto">
@@ -122,9 +119,7 @@
 
     </div>
 </template>
-
 <script>
-    // import axios from 'axios';
     import getCat from '../utils/getCatName';
     import formatDateTime from '../utils/formatDateTime';
     import $ from 'jquery'
@@ -160,10 +155,10 @@
                 };
             },
             name() {
-                return this.user.name ? this.user.name : 'Add username'
+                return this.user.name ? this.user.name : 'Add username';
             },
             bio() {
-                return this.user.bio ? `<p id="user-bio">${this.user.bio}</p>` : ' ... '
+                return this.user.bio ? this.user.bio : ' ... ';
             },
             image() {
                 return this.user.image ? this.user.image : null;
@@ -194,7 +189,6 @@
                     $(icon).fadeOut();
                     $(icon).parent().find('.edit-btn').fadeIn();
                     $('textarea').slideUp();
-                    $('.bio-btn').text($('textarea').val().length ? 'Edit' : 'Add bio')
                     $('#user-bio').text($('textarea').val()).slideDown();
                     this.updateUser();
                 } else {
@@ -202,7 +196,6 @@
                     $(icon).parent().find('.save-btn').fadeIn();
                     $('#user-bio').slideUp();
                     $('textarea').text($('#user-bio').text()).slideDown();
-                    $('.bio-btn').text('Save')
                 }
             },
             enableInput(e) {
@@ -236,7 +229,6 @@
                 $(target).parent().slideUp();
             },
             updateLinkValue(e) {
-                console.log(e.target.tagName);
                 let input = e.target.tagName == 'path' ? $(e.target).parent().parent().find('input') : $(e.target).parent().find('input');
                 let val = $(input).val();
                 let span = $('.link[beingEdited]')[0];
@@ -266,7 +258,6 @@
                     social: JSON.stringify(social),
                     bio: $('textarea').val().trim()
                 };
-                console.log(user.social);
 
                 this.$store.dispatch('update_user', user)
                     .catch(err => console.log(err))
