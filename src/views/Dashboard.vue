@@ -29,19 +29,19 @@
                             class="hidden w-50 mx-auto border rounded md-textarea form-control"></textarea>
                         <p v-html="bio">
                         </p>
-                        
+
                         <font-awesome-icon :icon="['fas', 'check']" @click="toggleBio($event)"
-                                class="position-absolute save-btn mt-1 mx-1" style="display:none"/>
+                            class="position-absolute save-btn mt-1 mx-1" style="display:none" />
                         <font-awesome-icon :icon="['fas', 'edit']" @click="toggleBio($event)"
-                                class="position-absolute  edit-btn mt-1 mx-1" />    
+                            class="position-absolute  edit-btn mt-1 mx-1" />
                     </div>
                 </div>
                 <div class="col-12 col-md-6">
                     <div class="user-meta text-left mt-md-3 text-center">
                         <div class="form-group position-relative">
                             <label for="username"></label>
-                            <input type="text" id="username" class="w-75 w-md-100"
-                                :placeholder="'Usename: ' + name" :value="name" disabled>
+                            <input type="text" id="username" class="w-75 w-md-100" :placeholder="'Usename: ' + name"
+                                :value="name" disabled>
 
                             <font-awesome-icon :icon="['fas', 'check']" @click="disableInputAndSend($event)"
                                 class="save-btn mt-1 mx-1 position-absolute" style="right: 0; display: none" />
@@ -64,18 +64,23 @@
                                 <span class="link py-2 mx-2 border rounded" v-for="icon in social_icons"
                                     :key="icon.name" :data-prefix="icon.prefix" :data-value="icon.url"
                                     :data-name="icon.name"
-                                    :class="icon.url? 'border-success bg-success':'border-warning bg-warning'"
-                                    @click="editSocial($event)">
+                                    :class="icon.url? 'bg-success':'bg-warning'"
+                                    @click="openSocialEdit($event)">
                                     <font-awesome-icon :icon="['fab', icon.prefix]" class="mx-3" />
                                     <input type="text" class="d-none link-value" :value="icon.url">
                                 </span>
                                 <br>
-                                <input type="text" @blur="hideSocInput($event.target)" @change="updateLinkValue($event)"
-                                    class="soc-edit w-75  mt-3">
-                            <font-awesome-icon :icon="['fas', 'check']" @click="disableInputAndSend($event)"
-                                class="save-btn mt-1 mx-1 position-absolute" style="right: 0; display: none" />
-                            <font-awesome-icon :icon="['fas', 'edit']" @click="enableInput($event)"
-                                class="edit-btn mt-1 mx-1 position-absolute" style="right: 0" />
+                                <div class="soc-edit mt-3">
+                                    <input type="text" @blur="hideSocInput($event.target)"
+                                    class="soc-edit w-75 ">
+                                    <font-awesome-icon :icon="['fas', 'check']" 
+                                    @click="updateLinkValue($event)"
+                                        class="save-btn mt-1 mx-1 position-absolute"
+                                         style="right: 0;" title="Save"/>
+                                </div>
+
+
+
                             </div>
                         </div>
                         <div class="form-group row col-md-7  mx-auto">
@@ -131,7 +136,28 @@
         },
         computed: {
             social_icons() {
-                return this.user.social ? JSON.parse(this.user.social) : { "0": { "prefix": "facebook-f", "name": "Facebook", "url": "" }, "1": { "prefix": "linkedin-in", "name": "LinkedIn", "url": "" }, "2": { "prefix": "instagram", "name": "Instagram", "url": "" }, "3": { "prefix": "github", "name": "GitHub", "url": "" } }	;
+                return this.user.social ? JSON.parse(this.user.social) : {
+                    "0": {
+                        "prefix": "facebook-f",
+                        "name": "Facebook",
+                        "url": ""
+                    },
+                    "1": {
+                        "prefix": "linkedin-in",
+                        "name": "LinkedIn",
+                        "url": ""
+                    },
+                    "2": {
+                        "prefix": "instagram",
+                        "name": "Instagram",
+                        "url": ""
+                    },
+                    "3": {
+                        "prefix": "github",
+                        "name": "GitHub",
+                        "url": ""
+                    }
+                };
             },
             name() {
                 return this.user.name ? this.user.name : 'Add username'
@@ -163,7 +189,7 @@
                     .catch(err => console.log(err))
             },
             toggleBio(e) {
-               let icon = e.target.tagName === "svg" ? e.target : $(e.target).parent();
+                let icon = e.target.tagName === "svg" ? e.target : $(e.target).parent();
                 if ($('textarea:visible').length) {
                     $(icon).fadeOut();
                     $(icon).parent().find('.edit-btn').fadeIn();
@@ -192,31 +218,33 @@
                 $(icon).parent().find('input').attr('disabled', true);
                 this.updateUser();
             },
-            editSocial(e) {
+            openSocialEdit(e) {
                 let span = $(e.target).closest('span')[0];
                 let val = $(span).attr('data-value');
                 let name = $(span).attr('data-name');
                 if (!val) {
-                    $('.soc-edit').attr('placeholder', name)
+                    $('.soc-edit').find('input').attr('placeholder', name)
                 } else {
-                    $('.soc-edit').val(val);
+                    $('.soc-edit').find('input').val(val);
                 }
                 $('.link').removeAttr('beingEdited')
                 $(span).attr('beingEdited', true)
 
-                $('.soc-edit').val(val).slideDown();
+                $('.soc-edit').slideDown();
             },
             hideSocInput(target) {
-                $(target).slideUp();
+                $(target).parent().slideUp();
             },
             updateLinkValue(e) {
-                let val = $(e.target).val();
+                console.log(e.target.tagName);
+                let input = e.target.tagName == 'path' ? $(e.target).parent().parent().find('input') : $(e.target).parent().find('input');
+                let val = $(input).val();
                 let span = $('.link[beingEdited]')[0];
-                // change colors
 
-                $(span).attr('data-value', val)
+                $(span).attr('data-value', val? val: '').removeClass(val ? 'bg-warning': 'bg-success')
+                .addClass(val ? 'bg-success': 'bg-warning');
                 this.updateUser();
-                $(e.target).val('');
+                $(input).val('');
             },
             updateUser: function () {
 
@@ -238,6 +266,7 @@
                     social: JSON.stringify(social),
                     bio: $('textarea').val().trim()
                 };
+                console.log(user.social);
 
                 this.$store.dispatch('update_user', user)
                     .catch(err => console.log(err))
