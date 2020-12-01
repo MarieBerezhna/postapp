@@ -11,25 +11,28 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="">
+                   <span class="text-danger"> {{ error }} </span>
+        <form action="" @submit.prevent="changePass()">
             <div class="col-12 form-group">
                 <label for="psw"></label>
-                <input type="password" class="form-control"
-                    placeholder="Password" name="psw" required>
+                <input type="password" class="form-control" v-model="password"
+                    placeholder="Enter new password" name="psw" required>
             </div>
             <div class="col-12 form-group">
                 <label for="psw-cnf"></label>
-                <input type="password" class="form-control"
-                    placeholder="Confirm password" name="pswcnf" required>
+                <input type="password" class="form-control" v-model="password_confirmation"
+                    placeholder="Confirm new password" name="pswcnf" required>
             </div>
             <div class="col-12 form-group">
-                <button type="submit" class="btn w-100">Change password!</button>
+                <button type="submit"
+                class="btn w-100">Change password!</button>
+            </div>
+            <div class="modal-footer">
+                <span class="text-secondary" style="font-size: 0.9rem">
+                Proceed with caution: <br>you won't be able to login with the old password afterwards.
+                </span>
             </div>
         </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
       </div>
     </div>
   </div>
@@ -37,8 +40,40 @@
 </template>
 
 <script>
+import $ from 'jquery';
     export default {
-        
+        data() {
+            return {
+                password: "",
+                password_confirmation: "",
+                error: ""
+            }
+        },
+        methods: {
+            modalWait () {
+                $('.modal-body').css({opacity : 0.5})
+            },
+            changePass: function () {
+                
+                if (this.password !== this.password_confirmation) {
+                    this.error = "Passwords don't match. Try again";
+                // } else if (this.password.length < 5){
+                //     this.error = "Password is too short. Must be at least 6 symbols";
+                } else {
+                    $('.modal-body').css({opacity : 0.5})
+                    let pass = this.password;
+                    let user_id = JSON.parse(localStorage.user).id;
+                    this.$store.dispatch('change_pass', {
+                        pass, user_id
+                        }).then(() => {
+
+                            $('.modal-body').css({opacity : 1}).text("Success!")
+
+                        })
+                    .catch(err => console.log(err))
+                }
+            }
+        }
     }
 </script>
 

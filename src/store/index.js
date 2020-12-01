@@ -84,7 +84,31 @@ const actions = {
                 });
         });
     },
+    change_pass({
+        commit
+    }, data) {
+        return new Promise((resolve, reject) => {
+            axios({
+                    url: `${apiBase}/users/passchange/${data.user_id}`,
+                    data: {
+                        "newpassword": data.pass
+                    },
+                    method: 'PATCH'
+                })
+                .then(resp => {
+                    console.log(resp);
 
+                })
+                .catch(err => {
+                    commit('auth_error', err);
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    console.log(err);
+                    reject(err);
+                });
+            resolve();
+        });
+    },
     register({
         commit
     }, user) {
