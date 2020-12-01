@@ -29,8 +29,6 @@ const actions = {
     }) {
         axios.get(`${apiBase}/init`)
             .then(response => {
-
-                console.log(response);
                 commit('SET_DATA', response.data.data);
             });
     },
@@ -77,7 +75,6 @@ const actions = {
             axios.post(`${apiBase}/users/avatar/`, fd)
 
                 .then(resp => {
-                    console.log('action:' + JSON.stringify(resp));
                     resolve(resp);
                 }).catch(err => {
                     reject(err);
@@ -121,6 +118,7 @@ const actions = {
                 })
                 .then(resp => {
                     if (!resp.data.error) {
+
                         const token = resp.data.data.token;
                         const user = resp.data.data.user;
                         localStorage.setItem('token', token);
@@ -228,7 +226,6 @@ const mutations = {
     logout(state) {
         state.authStatus = '';
         state.token = '';
-        console.log('logged out');
     },
 };
 

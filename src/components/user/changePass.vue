@@ -11,7 +11,8 @@
         </button>
       </div>
       <div class="modal-body">
-                   <span class="text-danger"> {{ error }} </span>
+        <span class="text-danger"> {{ error }} </span>
+        <div class="text-success" style="display: none">Success!</div>
         <form action="" @submit.prevent="changePass()">
             <div class="col-12 form-group">
                 <label for="psw"></label>
@@ -33,6 +34,7 @@
                 </span>
             </div>
         </form>
+
       </div>
     </div>
   </div>
@@ -67,7 +69,7 @@ import $ from 'jquery';
                         pass, user_id
                         }).then(() => {
 
-                            $('.modal-body').css({opacity : 1}).text("Success!")
+                            $('.modal-body').css({opacity : 1}).find('.text-success').show();
 
                         })
                     .catch(err => console.log(err))

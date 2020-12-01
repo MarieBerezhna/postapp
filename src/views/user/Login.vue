@@ -61,6 +61,7 @@
                         password
                     })
                     .then(() => {
+                        
                         this.$router.push('/dashboard')
                         })
                     .catch(err => console.log(err))
@@ -74,9 +75,8 @@
                     this.$store.state.warning = "Passwords don't match"
                 } else {
                 this.$store.dispatch('register', data)
-                    .then((resp) => {
-                        console.log(resp);
-                        this.$router.push('/dashboard')
+                    .then(() => {
+                        this.$router.push('/welcome')
                         })
                     .catch(err => console.log(err))
                 }              

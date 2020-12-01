@@ -4,12 +4,12 @@ import MainFeed from '@/views/Feed.vue';
 const Dashboard = () => import('@/views/Dashboard');
 const Login = () => import('@/views/user/Login');
 const NotFound = () => import('@/views/404');
+const Welcome = () => import('@/views/user/Welcome');
 import store from '@/store';
 
 Vue.use(VueRouter);
 
-const routes = [
-  {
+const routes = [{
     path: '/',
     name: 'Home',
     component: MainFeed
@@ -18,20 +18,32 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
-        meta: {
-        requiresAuth: true
+    meta: {
+      requiresAuth: true
     }
   },
   {
     path: '/login',
     name: 'Login',
     component: Login,
-    props: { loginPage: true }
+    props: {
+      loginPage: true
+    }
   },
-    {
+  {
     path: '/signup',
     component: Login,
-    props: { loginPage: false }
+    props: {
+      loginPage: false
+    }
+  },
+  {
+    path: '/welcome',
+    component: Welcome,
+    props: {
+      email: JSON.parse(localStorage.user).email
+    }
+
   },
   {
     path: '*',
