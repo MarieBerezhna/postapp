@@ -49,9 +49,6 @@
 </div>
 </div>
 
-
-
-
 </template>
 
 <script>
@@ -86,7 +83,6 @@ import $ from 'jquery';
               tags: this.tags,
               user_id: this.user.id
             }
-           console.log(post);
             this.$store.dispatch('create_post', post)
                     .catch(err => console.log(err))
           }

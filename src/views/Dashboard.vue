@@ -1,7 +1,5 @@
 <template>
     <div class="container">
-
-
         <form class="user-box" v-if="Object.keys(user).length" :id="user.id" method="POST"
             enctype="multipart/form-data">
             <input @change="avatarUpload($event)" type="file" id="image-input" name="avatar"
@@ -22,7 +20,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="user-meta position-relative w-75 mx-auto">
                         <textarea name="" cols="5" rows="3"
                             class="hidden w-75 mx-auto border rounded md-textarea form-control"></textarea>
@@ -33,7 +30,7 @@
                         <font-awesome-icon :icon="['fas', 'check']" @click="toggleBio($event)"
                             class="position-absolute save-btn mt-1 mx-1" style="right:0;display:none" />
                         <font-awesome-icon :icon="['fas', 'edit']" @click="toggleBio($event)"
-                            class="position-absolute  edit-btn mt-1 mx-1" style="right:0;"/>
+                            class="position-absolute  edit-btn mt-1 mx-1" style="right:0;" />
                     </div>
                 </div>
                 <div class="col-12 col-md-6">
@@ -63,25 +60,23 @@
                             <div class="social-links mx-auto text-center ">
                                 <span class="link py-2 mx-2 border rounded" v-for="icon in social_icons"
                                     :key="icon.name" :data-prefix="icon.prefix" :data-value="icon.url"
-                                    :data-name="icon.name"
-                                    :class="icon.url? 'bg-success':'bg-warning'"
+                                    :data-name="icon.name" :class="icon.url? 'bg-success':'bg-warning'"
                                     @click="openSocialEdit($event)">
                                     <font-awesome-icon :icon="['fab', icon.prefix]" class="mx-3" />
                                     <input type="text" class="d-none link-value" :value="icon.url">
                                 </span>
                                 <br>
                                 <div class="soc-edit mt-3">
-                                    <input type="text" @blur="hideSocInput($event.target)"
-                                    class="soc-edit w-75 ">
-                                    <font-awesome-icon :icon="['fas', 'check']" 
-                                    @click="updateLinkValue($event)"
-                                        class="save-btn mt-1 mx-1 position-absolute"
-                                         style="right: 0;" title="Save"/>
+                                    <input type="text" @blur="hideSocInput($event.target)" class="soc-edit w-75 ">
+                                    <font-awesome-icon :icon="['fas', 'check']" @click="updateLinkValue($event)"
+                                        class="save-btn mt-1 mx-1 position-absolute" style="right: 0;" title="Save" />
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row col-md-7  mx-auto">
-                            <div class="btn btn-secondary col-12 mx-auto my-1">Change password</div>
+                            <div class="btn btn-secondary col-12 mx-auto my-1" data-toggle="modal" data-target="#changePassModal">Change password</div>
+                            <div class="change-pass position-fixed bg-light" style="top:0;right:0">
+                            </div>
                             <div class="btn btn-danger col-12 mx-auto">Delete account</div>
                         </div>
                     </div>
@@ -116,14 +111,16 @@
 
             </div>
         </form>
-
+         <change-pass/>
     </div>
 </template>
 <script>
     import getCat from '../utils/getCatName';
     import formatDateTime from '../utils/formatDateTime';
     import $ from 'jquery'
+import changePass from '../components/user/changePass.vue';
     export default {
+  components: { changePass },
         data() {
             return {
                 user: JSON.parse(localStorage.getItem('user'))
@@ -229,12 +226,13 @@
                 $(target).parent().slideUp();
             },
             updateLinkValue(e) {
-                let input = e.target.tagName == 'path' ? $(e.target).parent().parent().find('input') : $(e.target).parent().find('input');
+                let input = e.target.tagName == 'path' ? $(e.target).parent().parent().find('input') : $(e.target)
+                    .parent().find('input');
                 let val = $(input).val();
                 let span = $('.link[beingEdited]')[0];
 
-                $(span).attr('data-value', val? val: '').removeClass(val ? 'bg-warning': 'bg-success')
-                .addClass(val ? 'bg-success': 'bg-warning');
+                $(span).attr('data-value', val ? val : '').removeClass(val ? 'bg-warning' : 'bg-success')
+                    .addClass(val ? 'bg-success' : 'bg-warning');
                 this.updateUser();
                 $(input).val('');
             },
@@ -253,12 +251,12 @@
 
                 const user = {
                     id: $('form').attr('id'),
-                    name: $('#username').val(),
+                    name: $('#username').val().trim(),
                     email: $('#email').val().trim(),
                     social: JSON.stringify(social),
-                    bio: $('textarea').val().trim()
+                    bio: $('#user-bio').text().trim()
                 };
-
+                console.log(user.bio);
                 this.$store.dispatch('update_user', user)
                     .catch(err => console.log(err))
             },
