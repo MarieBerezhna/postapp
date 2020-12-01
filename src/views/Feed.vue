@@ -1,17 +1,6 @@
 <template>
   <div id="main" class="py-5 container ">
-    <nav class="navbar navbar-expand-lg navbar-light position-relative w-100">
-      <div class="collapse navbar-collapse position-absolute" id="navbarNav">
-        <ul class="navbar-nav bg-light">
-          <li class="nav-item active" @click="filterCats($event)">
-            <a class="nav-link" href="#" data-category=0>All</a>
-          </li>
-          <li class="nav-item" v-for="cat in categories" :key="cat.id" @click="filterCats($event)">
-            <a class="nav-link" :data-category="cat.id" href="#">{{ cat.name }}</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <CatFilter :categories="categories"/>
     <div class="row">
       <div class="col-12 col-md-7">
         <div v-for='post in posts' :key='post.id' class="border my-2 p-3 post" :data-category="post.cat"
@@ -22,7 +11,6 @@
               <img :src="post.image" :alt="post.tags" width="100%">
               <div class="meta">
                 <span class="text-danger post-category" :data-id="post.cat">
-                  <!-- {{ getCatName(post.cat) }} -->
                   {{ getCat(post.cat) }}
                 </span>
                 <span v-for="tag in parseTags(post.tags)" :key="tag.index" class="text-success">
@@ -46,11 +34,6 @@
           <div class="row">
               <div @click="toggleText($event, post.id)" class="btn btn-success mx-auto my-3 col-10 col-md-4">Read more</div>
           </div>
-         
-          <!-- 
-            <div v-if="post.origin" class="text-center">
-                <a class=" text-warning" :href="post.origin">See original post</a> 
-            </div> -->
         </div>
       </div>
     </div>
@@ -62,9 +45,13 @@
 <script>
 import getCat from '../utils/getCatName';
 import formatDateTime from '../utils/formatDateTime';
-  import $ from 'jquery';
+import $ from 'jquery';
+import CatFilter from '../components/CatFilter.vue';
   export default {
     name: 'HelloWorld',
+    components: {
+      CatFilter
+    },
     computed: {
       posts() {
         return this.$store.state.data.posts;
@@ -77,27 +64,7 @@ import formatDateTime from '../utils/formatDateTime';
       getCat(cat) {
         return getCat(this.$store.state.data.cats, cat)
       },
-      filterCats(e) {
-        e.preventDefault();
-        let cat = $(e.target).attr('data-category');
-        let posts = $('.post');
 
-        if (cat !== "0") {
-
-          $(posts).each((el) => {
-            let post = $(posts)[el];
-            let postcat = $(post).attr('data-category');
-            if (postcat !== cat) {
-              $(post).slideUp();
-            } else {
-              $(post).slideDown();
-            }
-          });
-        } else {
-          $(posts).slideDown();
-        }
-
-      },
       parseTags(tags) {
         let tagsArr = tags.split(' ');
         return tagsArr;

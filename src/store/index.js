@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 
 const api = require('../../api');
-const apiBase = `${api.protocol}://${api.host}:${api.port}${api.baseUrl}`;
+const apiBase = `${api.protocol}://${api.host}${api.baseUrl}`;
 
 //load Vuex
 Vue.use(Vuex);

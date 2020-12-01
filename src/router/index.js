@@ -5,7 +5,6 @@ const Dashboard = () => import('@/views/Dashboard');
 const Login = () => import('@/views/user/Login');
 const NotFound = () => import('@/views/404');
 import store from '@/store';
-// const user = store.state.user;
 
 Vue.use(VueRouter);
 

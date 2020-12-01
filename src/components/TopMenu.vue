@@ -10,16 +10,11 @@
                         <a class="navbar-brand text-center col" href="/"><img alt="postApp logo"
                                 src="../assets/logo.png" class="logo"></a>
 
-                        <a class="admin col" href="#" type="button" data-toggle="collapse" data-target="#adminNav"
+                        <a class="admin" href="#" type="button" data-toggle="collapse" data-target="#adminNav"
                             aria-controls="adminNav" aria-expanded="false" aria-label="Toggle navigation"
                             @click="toggleAdminMenu($event)">
                             <img src="../assets/profile.png" alt="admin">
                         </a>
-
-                        <button class="navbar-toggler col" type="button" data-toggle="collapse" data-target="#navbarNav"
-                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
                     </div>
                     <div class="collapse position-absolute" id="adminNav">
                         <ul class="bg-light rounded">
@@ -54,7 +49,6 @@
                         this.$router.push('/login').catch(() => {});
                     })
                 $('.admin')[0].click();
-                // this.$store.getters.isLoggedIn = false;
             }
         },
         created() {

@@ -1,6 +1,8 @@
-module.exports = {
-    protocol: 'http',
-    host: 'localhost',
-    port: 3000,
-    baseUrl: '/api',
+
+const config = {
+    protocol: 'https',
+        host: 'postappapi.webmarie.com',
+        port: 8,
+        baseUrl: '/api',
 };
+module.exports = config;
