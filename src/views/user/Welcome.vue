@@ -21,8 +21,13 @@
 
 <script>
     export default {
-        props: {
-            email: String
+        data () {
+            return {
+                email: ''
+            }
+        },
+        mounted () {
+            this.email = JSON.parse(localStorage.user).email
         }
     }
 </script>

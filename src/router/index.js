@@ -5,6 +5,7 @@ const Dashboard = () => import('@/views/Dashboard');
 const Login = () => import('@/views/user/Login');
 const NotFound = () => import('@/views/404');
 const Welcome = () => import('@/views/user/Welcome');
+const Verified = () => import('@/views/user/Verified');
 import store from '@/store';
 
 Vue.use(VueRouter);
@@ -40,11 +41,11 @@ const routes = [{
   {
     path: '/welcome',
     component: Welcome,
-    props: {
-      email: JSON.parse(localStorage.user).email
-    }
-
   },
+    {
+      path: '/verify/:id',
+      component: Verified,
+    },
   {
     path: '*',
     component: NotFound

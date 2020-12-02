@@ -4,6 +4,24 @@ import Vue from 'vue';
 
 const api = require('../../api');
 const apiBase = `${api.protocol}://${api.host}${api.baseUrl}`;
+const proceed_login = (commit, resp, resolve, reject) => {
+    if (!resp.data.error) {
+        const token = resp.data.data.token;
+        const user = resp.data.data.user;
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+        axios.defaults.headers.common.Authorization = token;
+        let data = {
+            token,
+            user
+        };
+        commit('auth_success', data);
+        resolve(resp);
+    } else {
+        commit('auth_error', resp);
+        reject(resp);
+    }
+};
 
 //load Vuex
 Vue.use(Vuex);
@@ -117,19 +135,7 @@ const actions = {
                     method: 'POST'
                 })
                 .then(resp => {
-                    if (!resp.data.error) {
-
-                        const token = resp.data.data.token;
-                        const user = resp.data.data.user;
-                        localStorage.setItem('token', token);
-                        localStorage.setItem('user', JSON.stringify(user));
-                        axios.defaults.headers.common.Authorization = token;
-                        commit('auth_success', token, user);
-                        resolve(resp);
-                    } else {
-                        commit('auth_error', resp);
-                    }
-
+                    proceed_login(commit, resp, resolve, reject);
                 })
                 .catch(err => {
                     commit('auth_error', err);
@@ -139,6 +145,28 @@ const actions = {
                     reject(err);
                 });
         });
+    },
+    verify_email({
+        commit
+    }, user_id) {
+        return new Promise((resolve, reject) => {
+            commit('auth_request');
+            axios({
+                    url: `${apiBase}/varify/${user_id}`,
+                    method: 'PATCH'
+                })
+                .then(resp => {
+
+                    proceed_login(commit, resp, resolve, reject);
+
+                })
+                .catch(err => {
+                    commit('auth_error');
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('token');
+                    reject(err);
+                });
+        })
     },
     login({
         commit
@@ -152,22 +180,7 @@ const actions = {
                 })
                 .then(resp => {
 
-                    if (!resp.data.error) {
-                        const token = resp.data.data.token;
-                        let user = resp.data.data.user;
-                        user.image = `${apiBase}/users/avatar/${user.id}/${user.image}`;
-                        localStorage.setItem('token', token);
-                        localStorage.setItem('user', JSON.stringify(user));
-                        axios.defaults.headers.common.Authorization = token;
-                        let data = {
-                            token,
-                            user
-                        };
-                        commit('auth_success', data);
-                        resolve(resp);
-                    } else {
-                        commit('auth_error', resp);
-                    }
+                    proceed_login(commit, resp, resolve, reject);
 
                 })
                 .catch(err => {
@@ -221,9 +234,13 @@ const mutations = {
     auth_error(state, resp) {
         console.log(resp);
         state.authStatus = 'error';
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
         state.warning = resp.data.message;
     },
     logout(state) {
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
         state.authStatus = '';
         state.token = '';
     },
