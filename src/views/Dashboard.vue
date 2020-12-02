@@ -161,9 +161,7 @@ import changePass from '../components/user/changePass.vue';
                 return this.user.image ? this.user.image : null;
             },
             posts() {
-                let posts = this.$store.state.data.posts ? this.$store.state.data.posts.filter(post => post.user_id ===
-                    this.user.id) : null;
-                return posts
+                return this.user.posts
             },
             comments() {
                 return this.user.comments
