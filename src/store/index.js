@@ -4,10 +4,13 @@ import Vue from 'vue';
 
 const api = require('../../api');
 const apiBase = `${api.protocol}://${api.host}${api.baseUrl}`;
+
 const proceed_login = (commit, resp, resolve, reject) => {
     if (!resp.data.error) {
         const token = resp.data.data.token;
         const user = resp.data.data.user;
+        user.image = `${apiBase}/users/avatar/${user.id}/${user.image}`;
+        console.log(user);
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
         axios.defaults.headers.common.Authorization = token;
