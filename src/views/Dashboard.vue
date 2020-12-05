@@ -67,14 +67,15 @@
                                 </span>
                                 <br>
                                 <div class="soc-edit mt-3">
-                                    <input type="text" @blur="hideSocInput($event.target)" class="soc-edit w-75 ">
+                                    <input type="text" @blur="hideSocInput()" class="soc-edit w-75 ">
                                     <font-awesome-icon :icon="['fas', 'check']" @click="updateLinkValue($event)"
                                         class="save-btn mt-1 mx-1 position-absolute" style="right: 0;" title="Save" />
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row col-md-7  mx-auto">
-                            <div class="btn btn-secondary col-12 mx-auto my-1" data-toggle="modal" data-target="#changePassModal">Change password</div>
+                            <div class="btn btn-secondary col-12 mx-auto my-1" data-toggle="modal"
+                                data-target="#changePassModal">Change password</div>
                             <div class="change-pass position-fixed bg-light" style="top:0;right:0">
                             </div>
                             <div class="btn btn-danger col-12 mx-auto">Delete account</div>
@@ -111,16 +112,18 @@
 
             </div>
         </form>
-         <change-pass/>
+        <change-pass />
     </div>
 </template>
 <script>
     import getCat from '../utils/getCatName';
     import formatDateTime from '../utils/formatDateTime';
     import $ from 'jquery'
-import changePass from '../components/user/changePass.vue';
+    import changePass from '../components/user/changePass.vue';
     export default {
-  components: { changePass },
+        components: {
+            changePass
+        },
         data() {
             return {
                 user: JSON.parse(localStorage.getItem('user'))
@@ -210,29 +213,43 @@ import changePass from '../components/user/changePass.vue';
                 let span = $(e.target).closest('span')[0];
                 let val = $(span).attr('data-value');
                 let name = $(span).attr('data-name');
+                $('.soc-edit').find('input').val('');
+                // if assigned show the link, if not set placeholder:
                 if (!val) {
                     $('.soc-edit').find('input').attr('placeholder', name)
                 } else {
                     $('.soc-edit').find('input').val(val);
                 }
+
                 $('.link').removeAttr('beingEdited')
                 $(span).attr('beingEdited', true)
 
-                $('.soc-edit').slideDown();
+                if (!$('.soc-edit:visible').length) {
+                    $('.soc-edit').slideDown();
+                }
+
+
             },
-            hideSocInput(target) {
-                $(target).parent().slideUp();
+            hideSocInput() {
+                $('.soc-edit').slideUp();
             },
             updateLinkValue(e) {
-                let input = e.target.tagName == 'path' ? $(e.target).parent().parent().find('input') : $(e.target)
-                    .parent().find('input');
+                let input = e.target.tagName == 'path' ? 
+                $(e.target).parent().parent().find('input') : 
+                $(e.target).parent().find('input');
+
+                console.log(input);
+
                 let val = $(input).val();
                 let span = $('.link[beingEdited]')[0];
 
-                $(span).attr('data-value', val ? val : '').removeClass(val ? 'bg-warning' : 'bg-success')
-                    .addClass(val ? 'bg-success' : 'bg-warning');
-                this.updateUser();
+                $(span).attr('data-value', val ? val : '')
+                .removeClass(val ? 'bg-warning' : 'bg-success')
+                .addClass(val ? 'bg-success' : 'bg-warning');
+
                 $(input).val('');
+                this.updateUser();
+                this.hideSocInput();
             },
             updateUser: function () {
 
