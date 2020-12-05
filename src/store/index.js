@@ -6,10 +6,13 @@ const api = require('../../api');
 const apiBase = `${api.protocol}://${api.host}${api.baseUrl}`;
 
 const proceed_login = (commit, resp, resolve, reject) => {
+    console.log(resp);
     if (!resp.data.error) {
         const token = resp.data.data.token;
         const user = resp.data.data.user;
-        user.image = `${apiBase}/users/avatar/${user.id}/${user.image}`;
+        if (user.image) {
+            user.image = `${apiBase}/users/avatar/${user.id}/${user.image}`;
+        }
         console.log(user);
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
@@ -155,15 +158,17 @@ const actions = {
         return new Promise((resolve, reject) => {
             commit('auth_request');
             axios({
-                    url: `${apiBase}/varify/${user_id}`,
+                    url: `${apiBase}/verify/${user_id}`,
                     method: 'PATCH'
                 })
                 .then(resp => {
 
                     proceed_login(commit, resp, resolve, reject);
-
+                    // commit('update_user'. resp);
+                    console.log(resp);
                 })
                 .catch(err => {
+                    console.log(err);
                     commit('auth_error');
                     localStorage.removeItem('user');
                     localStorage.removeItem('token');

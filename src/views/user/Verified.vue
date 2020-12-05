@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-10 mx-auto">
 
-                <h1>Cool! You're a verified postApp user now!</h1>
+                <h1>{{ message }}</h1>
 
             </div>
         </div>
@@ -13,8 +13,15 @@
 
 <script>
     export default {
+        data() {
+            return {
+                message: ""
+            }
+        },
         created() {
-            console.log(this.$route.params);
+            this.$store.dispatch('verify_email', this.$route.params.id)
+            .then(() => this.message = "Cool! You're a verified postApp user now!")
+            .catch(()=> this.message = "Sorry, there was an error with ypur request. Please, try again later.")
         }
     }
 </script>
