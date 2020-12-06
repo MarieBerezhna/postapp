@@ -81,9 +81,11 @@
                         <div class="form-group row col-md-7  mx-auto">
                             <div class="btn btn-secondary col-12 mx-auto my-1" data-toggle="modal"
                                 data-target="#changePassModal">Change password</div>
-                            <div class="change-pass position-fixed bg-light" style="top:0;right:0">
-                            </div>
-                            <div class="btn btn-danger col-12 mx-auto">Delete account</div>
+                            <!-- <div class="change-pass position-fixed bg-light" style="top:0;right:0">
+                            </div> -->
+
+                            <div class="btn btn-danger col-12 mx-auto" data-toggle="modal"
+                                data-target="#deleteAccountModal">Delete account</div>
                         </div>
                     </div>
                 </div>
@@ -118,6 +120,7 @@
             </div>
         </form>
         <change-pass />
+        <delete-account />
     </div>
 </template>
 <script>
@@ -125,9 +128,11 @@
     import formatDateTime from '../utils/formatDateTime';
     import $ from 'jquery'
     import changePass from '../components/user/changePass.vue';
+    import deleteAccount from '../components/user/DeleteAccount.vue';
     export default {
         components: {
-            changePass
+            changePass,
+            deleteAccount
         },
         data() {
             return {
@@ -332,7 +337,6 @@
         img {
             z-index: -1;
         }
-
         .img-hover {
             z-index: 0;
             bottom: 50%;

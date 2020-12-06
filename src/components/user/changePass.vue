@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade " id="changePassModal" tabindex="-1" role="dialog" 
+    <div class="modal fade" id="changePassModal" tabindex="-1" role="dialog" 
     aria-labelledby="changePassModalLabel" aria-hidden="true">
             
               <div class="modal-dialog bg-light" role="document">

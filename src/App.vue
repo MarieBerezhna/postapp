@@ -26,7 +26,7 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch("getData");
+    this.$store.dispatch("getData").catch(err => console.log(err));
   },
     created: function () {
     this.$http.interceptors.response.use(undefined, function (err) {
