@@ -32,8 +32,13 @@
                         <font-awesome-icon :icon="['fas', 'edit']" @click="toggleBio($event)"
                             class="position-absolute  edit-btn mt-1 mx-1" style="right:0;" />
                     </div>
-                </div>
+                </div> 
                 <div class="col-12 col-md-6">
+                    <div v-if="!allowed" class="not-verified font-weight-light text-muted">
+                        Hey there! Your account is pending verification... <br>
+                        If you didn't get a link via e-mail, please check the spam folder or<br>
+                        <a class="link">request verification again</a>
+                    </div>
                     <div class="user-meta text-left mt-md-3 text-center">
                         <div class="form-group position-relative">
                             <label for="username"></label>
@@ -168,6 +173,9 @@
             },
             comments() {
                 return this.user.comments
+            },
+            allowed() {
+                return localStorage.user ? JSON.parse(localStorage.user).verified : false
             }
         },
         methods: {
@@ -176,9 +184,6 @@
             },
             avatarUpload() {
                 this.$store.dispatch('update_avatar', this.user.id)
-                    .then(resp => {
-                        console.log('dashboard' + JSON.stringify(resp));
-                    })
                     .catch(err => console.log(err))
             },
             toggleBio(e) {
@@ -234,18 +239,16 @@
                 $('.soc-edit').slideUp();
             },
             updateLinkValue(e) {
-                let input = e.target.tagName == 'path' ? 
-                $(e.target).parent().parent().find('input') : 
-                $(e.target).parent().find('input');
-
-                console.log(input);
+                let input = e.target.tagName == 'path' ?
+                    $(e.target).parent().parent().find('input') :
+                    $(e.target).parent().find('input');
 
                 let val = $(input).val();
                 let span = $('.link[beingEdited]')[0];
 
                 $(span).attr('data-value', val ? val : '')
-                .removeClass(val ? 'bg-warning' : 'bg-success')
-                .addClass(val ? 'bg-success' : 'bg-warning');
+                    .removeClass(val ? 'bg-warning' : 'bg-success')
+                    .addClass(val ? 'bg-success' : 'bg-warning');
 
                 $(input).val('');
                 this.updateUser();
@@ -271,7 +274,6 @@
                     social: JSON.stringify(social),
                     bio: $('#user-bio').text().trim()
                 };
-                console.log(user.bio);
                 this.$store.dispatch('update_user', user)
                     .catch(err => console.log(err))
             },

@@ -6,7 +6,7 @@ const api = require('../../api');
 const apiBase = `${api.protocol}://${api.host}${api.baseUrl}`;
 
 const proceed_login = (commit, resp, resolve, reject) => {
-    console.log(resp);
+    // console.log(resp);
     if (!resp.data.error) {
         const token = resp.data.data.token;
         const user = resp.data.data.user;
@@ -162,10 +162,7 @@ const actions = {
                     method: 'PATCH'
                 })
                 .then(resp => {
-
                     proceed_login(commit, resp, resolve, reject);
-                    // commit('update_user'. resp);
-                    console.log(resp);
                 })
                 .catch(err => {
                     console.log(err);

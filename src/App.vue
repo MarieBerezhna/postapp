@@ -3,7 +3,7 @@
 
     <TopMenu class="mb-2"/>
      <router-view class="router-view"/>
-      <CreatePost/>
+      <CreatePost v-if="allowed"/>
      <MainFooter />
   </div>
 </template>
@@ -19,6 +19,11 @@ export default {
     TopMenu,
     MainFooter,
     CreatePost
+  },
+  computed: {
+    allowed () {
+      return localStorage.user ? JSON.parse(localStorage.user).verified : false
+    }
   },
   mounted () {
     this.$store.dispatch("getData");
