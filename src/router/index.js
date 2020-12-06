@@ -4,7 +4,6 @@ import MainFeed from '@/views/Feed.vue';
 const Dashboard = () => import('@/views/Dashboard');
 const Login = () => import('@/views/user/Login');
 const NotFound = () => import('@/views/404');
-const Welcome = () => import('@/views/user/Welcome');
 const Verified = () => import('@/views/user/Verified');
 import store from '@/store';
 
@@ -37,10 +36,6 @@ const routes = [{
     props: {
       loginPage: false
     }
-  },
-  {
-    path: '/welcome',
-    component: Welcome,
   },
     {
       path: '/verify/:id',

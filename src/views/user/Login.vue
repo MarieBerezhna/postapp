@@ -76,7 +76,7 @@
                 } else {
                 this.$store.dispatch('register', data)
                     .then(() => {
-                        this.$router.push('/welcome')
+                          this.$router.push('/dashboard')
                         })
                     .catch(err => console.log(err))
                 }              
