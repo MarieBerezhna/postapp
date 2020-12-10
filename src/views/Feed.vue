@@ -22,8 +22,7 @@
               </div>
 
             </div>
-            <div v-html="post.text" class="col-12 col-md-6 p-3 post-text text-justify">
-              <!-- {{ shortenText(post.text) }} -->
+            <div v-html="post.shortened" class="col-12 col-md-6 p-3 post-text text-justify">
             </div>
           </div>
           <div class="row">
@@ -31,8 +30,9 @@
 
             </div>
           </div>
-          <div class="row">
-              <div @click="toggleText($event, post.id)" class="btn btn-success mx-auto my-3 col-10 col-md-4">Read more</div>
+          <div class="row" v-if="post.text.length >= 300">
+              <div @click="toggleText($event, post.id)" 
+              class="show btn btn-success mx-auto my-3 col-10 col-md-4">Read more</div>
           </div>
         </div>
       </div>
@@ -53,7 +53,7 @@ import CatFilter from '../components/CatFilter.vue';
       CatFilter
     },
     computed: {
-      posts() {
+      posts () {
         let posts = this.$store.state.data.posts;
         return posts;
       },
@@ -73,25 +73,18 @@ import CatFilter from '../components/CatFilter.vue';
       datetime: function (datetime) {
         return formatDateTime(datetime)
       },
-      shortenText: function (text) {
-        let dots = '<span class="shortening-dots">...</span>';
-        let index = text.indexOf('<br>');
-        let visible = '<span class="shortened-text">' + text.slice(0, index) + dots + ' </span>';
-        return visible;
-      },
       toggleText: function (e, id) {
-        let postDiv = $(e.target).parent().parent()[0];
-        if ($(postDiv).find('.hidden').length) {
-          let dots = $(postDiv).find('.shortening-dots');
-          $(dots).remove();
-          let post = this.posts.filter(post => post.id === id);
-          let text = post[0].text;
-          text = text.slice(text.indexOf('<br>'));
-          $(postDiv).find('.hidden').removeClass('hidden').addClass('expanded').html(text);
-          $(e.target).text('Hide');
+        let post = this.posts.filter(post => post.id === id)[0];
+        let postDiv = $(`.post[data-id="${id}"]`).find('.post-text');
+        if( $(e.target).hasClass('show')) {
+          $(postDiv).html(post.text);
+          $(e.target).removeClass('show')
+          .addClass('hide').text('Show less');
+
         } else {
-          $(postDiv).find('.expanded').removeClass('expanded').addClass('hidden').empty();
-          $(e.target).text('Read more');
+           $(e.target).removeClass('hide')
+           .addClass('show').text('Read more');
+            $(postDiv).html(post.shortened);
         }
       }
     }

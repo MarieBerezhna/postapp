@@ -243,6 +243,15 @@ const actions = {
 //to handle mutations
 const mutations = {
     SET_DATA(state, data) {
+        let shortenText = function (value) {
+            let dots = value.length < 300 ? '' : '...';
+            let index = 300;
+            let visible = value.slice(0, index) +  dots;
+            return visible;
+    };
+        for (var i = 0; i < data.posts.length; i++) {
+            data.posts[i].shortened = shortenText(data.posts[i].text);
+        }
         state.data = data;
     },
     new_post(state, data) {
