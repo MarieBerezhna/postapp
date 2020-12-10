@@ -42,7 +42,8 @@
                     <div class="user-meta text-left mt-md-3 text-center">
                         <div class="form-group position-relative">
                             <label for="username"></label>
-                            <input type="text" id="username" class="w-75 w-md-100" :placeholder="'Usename: ' + name"
+                            <input type="text" id="username" class="w-75 w-md-100" 
+                            :placeholder="'Usename: ' + name"
                                 :value="name" disabled>
 
                             <font-awesome-icon :icon="['fas', 'check']" @click="disableInputAndSend($event)"
@@ -81,9 +82,6 @@
                         <div class="form-group row col-md-7  mx-auto">
                             <div class="btn btn-secondary col-12 mx-auto my-1" data-toggle="modal"
                                 data-target="#changePassModal">Change password</div>
-                            <!-- <div class="change-pass position-fixed bg-light" style="top:0;right:0">
-                            </div> -->
-
                             <div class="btn btn-danger col-12 mx-auto" data-toggle="modal"
                                 data-target="#deleteAccountModal">Delete account</div>
                         </div>
@@ -141,28 +139,29 @@
         },
         computed: {
             social_icons() {
-                return this.user.social ? JSON.parse(this.user.social) : {
-                    "0": {
-                        "prefix": "facebook-f",
-                        "name": "Facebook",
-                        "url": ""
+                console.log(this.user.social);
+                return this.user.social ? JSON.parse(this.user.social) : [
+                    {
+                        prefix: "facebook-f",
+                        name: "Facebook",
+                        url: ""
                     },
-                    "1": {
-                        "prefix": "linkedin-in",
-                        "name": "LinkedIn",
-                        "url": ""
+                    {
+                        prefix: "linkedin-in",
+                        name: "LinkedIn",
+                        url: ""
                     },
-                    "2": {
-                        "prefix": "instagram",
-                        "name": "Instagram",
-                        "url": ""
+                    {
+                        prefix: "instagram",
+                        name: "Instagram",
+                        url: ""
                     },
-                    "3": {
-                        "prefix": "github",
-                        "name": "GitHub",
-                        "url": ""
+                    {
+                        prefix: "github",
+                        name: "GitHub",
+                        url: ""
                     }
-                };
+                ];
             },
             name() {
                 return this.user.name ? this.user.name : 'Add username';
@@ -180,7 +179,7 @@
                 return this.user.comments
             },
             allowed() {
-                return localStorage.user ? JSON.parse(localStorage.user).verified : false
+                return localStorage.user ? (JSON.parse(localStorage.user).verified ? JSON.parse(localStorage.user).verified : false) : false;
             }
         },
         methods: {
@@ -269,12 +268,13 @@
                         "prefix": $(item).attr('data-prefix'),
                         "url": $(item).attr('data-value')
                     }
-                    social[el] = data;
+                    if (data) social[el] = data;
                 })
 
                 const user = {
                     id: $('form').attr('id'),
                     name: $('#username').val().trim(),
+                    oldEmail: this.user.email,
                     email: $('#email').val().trim(),
                     social: JSON.stringify(social),
                     bio: $('#user-bio').text().trim()
@@ -304,6 +304,11 @@
             },
             getCatName(cat_id) {
                 return getCat(this.$store.state.data.cats, cat_id);
+            }
+        },
+        mounted () {
+            if ($('#adminNav:visible').length) {
+                 $('.admin')[0].click();
             }
         }
     }

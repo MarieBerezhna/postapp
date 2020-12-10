@@ -22,8 +22,8 @@
               </div>
 
             </div>
-            <div class="col-12 col-md-6 p-3 post-text text-justify">
-              {{ shortenText(post.text) }}
+            <div v-html="post.text" class="col-12 col-md-6 p-3 post-text text-justify">
+              <!-- {{ shortenText(post.text) }} -->
             </div>
           </div>
           <div class="row">
@@ -54,7 +54,8 @@ import CatFilter from '../components/CatFilter.vue';
     },
     computed: {
       posts() {
-        return this.$store.state.data.posts;
+        let posts = this.$store.state.data.posts;
+        return posts;
       },
       categories() {
         return this.$store.state.data.cats;
@@ -93,15 +94,6 @@ import CatFilter from '../components/CatFilter.vue';
           $(e.target).text('Read more');
         }
       }
-    },
-    mounted() {
-      setTimeout(function () {
-        $('.post-text, text-hidden').each((el) => {
-          let body = $('.post-text')[el];
-          let text = $(body).text();
-          $(body).html(text);
-        });
-      }, 500);
     }
   }
 </script>

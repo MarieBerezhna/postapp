@@ -51,19 +51,13 @@ const actions = {
     }) {
         axios.get(`${apiBase}/init`)
             .then(response => {
-                commit('SET_DATA', response.data.data);
+
+                if (response) {
+                    commit('SET_DATA', response.data.data);
+                } else {
+                    console.log('Server fault');
+                }
             });
-    },
-    create_post({
-        commit
-    }, post) {
-        axios({
-            url: `${apiBase}/posts`,
-            data: post,
-            method: 'POST'
-        }).then(resp => {
-            commit('new_post', resp.data);
-        });
     },
     update_user({
         commit
@@ -84,21 +78,46 @@ const actions = {
             });
         });
     },
+    create_post({
+        commit
+    }, post) {
+
+        return new Promise(() => {
+            const file = document.getElementById('post-img').files[0];
+            const fd = new FormData();
+            fd.append('0', file, file.name);
+            fd.append('data', JSON.stringify(post));
+            console.log(file, post);
+            axios({
+                url: `${apiBase}/posts`,
+                data: fd,
+                method: 'POST'
+            }).then(resp => {
+                console.log(resp);
+                commit('new_post', resp.data);
+            });
+        });
+
+    },
+
     update_avatar({
         commit
     }, id) {
         return new Promise((resolve, reject) => {
             const file = document.getElementById('image-input').files[0];
             const fd = new FormData();
-            fd.append('0', file, file.name);
-            fd.append('user_id', id);
-            commit('new_avatar', file.name);
-
-            axios.post(`${apiBase}/users/avatar/`, fd)
-
+            fd.append('avatar', file);
+            axios.post(`${apiBase}/users/avatar/${id}`, fd, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
                 .then(resp => {
+                    console.log(resp);
+                    commit('new_avatar', file.name);
                     resolve(resp);
                 }).catch(err => {
+                    console.log(err);
                     reject(err);
                 });
         });
@@ -128,16 +147,18 @@ const actions = {
             resolve();
         });
     },
-    rm_user({ commit }, user_id) {
+    rm_user({
+        commit
+    }, user_id) {
         return new Promise(() => {
             axios({
                 url: `${apiBase}/users/${user_id}`,
                 method: 'DELETE'
             }).then(() => {
-                 commit('logout')
+                commit('logout')
             }).catch(err => {
                 console.log(err);
-               
+
             });
         })
     },

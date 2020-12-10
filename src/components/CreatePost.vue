@@ -14,7 +14,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="">
+        <form action="" method="POST"
+            enctype="multipart/form-data">
           <div class="form-group">
             <label for=""></label>
             <input type="text" v-model="heading" placeholder="Heading (optional)" class="form-control">
@@ -26,7 +27,7 @@
             </div>
           <div class="form-group">
             <label for=""></label>
-            <input type="file" id="img" name="img" accept="image/*">
+            <input type="file" id="post-img" name="img" accept="image/*">
           </div>
           <div class="form-group">
             <label for="categories">Category</label>
@@ -77,7 +78,6 @@ import $ from 'jquery';
             let post = {
               heading: this.heading,
               text: this.text,
-              image: this.image,
               cat: $('#cats').children("option:selected").val(),
               origin: this.origin,
               tags: this.tags,
