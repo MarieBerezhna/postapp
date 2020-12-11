@@ -107,7 +107,8 @@ const actions = {
             const file = document.getElementById('image-input').files[0];
             const fd = new FormData();
             fd.append('avatar', file);
-            axios.post(`${apiBase}/users/avatar/${id}`, fd, {
+             axios.post(`${apiBase}/users/avatar/${id}`, fd, {
+             // axios.post(`http://localhost:3000/api/users/avatar/${id}`, fd, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

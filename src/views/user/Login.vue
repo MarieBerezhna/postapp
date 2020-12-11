@@ -3,7 +3,7 @@
         <h1>{{ heading }} </h1>
          <span class="text-danger"> {{ error }} </span>
         <form action="#" method="post" @submit.prevent="formSubmit()"
-            class="col-8 col-md-4 mx-auto">
+            class="col-12 col-md-4 mx-auto">
             <div class="row">
                 <div class="col-12 form-group">
                     <label for="email"></label>   
@@ -19,7 +19,7 @@
                     <input v-model="password_confirmation" type="password" class="form-control" placeholder="Confirm password" name="pswcnf" required>
                 </div>
                 <div class="col-12 form-group">
-                    <button type="submit" class="btn w-100">{{ submitText }}</button>
+                    <button type="submit" class="btn w-100 mb-2">{{ submitText }}</button>
                     <p>{{ this.loginPage ? "Not registered?": "Already have an account?"}}
                         <a :href="this.loginPage ? '/signup' : '/login'">Sign up.</a>
                     </p>

@@ -139,7 +139,6 @@
         },
         computed: {
             social_icons() {
-                console.log(this.user.social);
                 return this.user.social ? JSON.parse(this.user.social) : [
                     {
                         prefix: "facebook-f",
@@ -187,7 +186,9 @@
                 $('#image-input').click();
             },
             avatarUpload() {
-                this.$store.dispatch('update_avatar', this.user.id)
+                this.$store.dispatch('update_avatar', this.user.id).then(()=>{
+                    $('.user-image').attr('src', JSON.parse(localStorage.user).image);
+                })
                     .catch(err => console.log(err))
             },
             toggleBio(e) {
