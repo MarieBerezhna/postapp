@@ -9,6 +9,7 @@ const proceed_login = (commit, resp, resolve, reject) => {
     if (!resp.data.error) {
         const token = resp.data.data.token;
         const user = resp.data.data.user;
+        console.log(user.image);
         if (user.image) {
             user.image = `${apiBase}/users/avatar/${user.id}/${user.image}`;
         }
@@ -66,6 +67,7 @@ const actions = {
 
             axios({
                 url: `${apiBase}/users/${user.id}`,
+                //url: `http://localhost:3000/api/users/${user.id}`,
                 data: user,
                 method: 'PATCH'
             }).then(resp => {
@@ -108,7 +110,7 @@ const actions = {
             const fd = new FormData();
             fd.append('avatar', file);
              axios.post(`${apiBase}/users/avatar/${id}`, fd, {
-             // axios.post(`http://localhost:3000/api/users/avatar/${id}`, fd, {
+              //axios.post(`http://localhost:3000/api/users/avatar/${id}`, fd, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -156,12 +158,12 @@ const actions = {
                 url: `${apiBase}/users/${user_id}`,
                 method: 'DELETE'
             }).then(() => {
-                commit('logout')
+                commit('logout');
             }).catch(err => {
                 console.log(err);
 
             });
-        })
+        });
     },
     register({
         commit
@@ -204,7 +206,7 @@ const actions = {
                     localStorage.removeItem('token');
                     reject(err);
                 });
-        })
+        });
     },
     login({
         commit

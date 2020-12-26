@@ -20,8 +20,22 @@ const routes = [{
     component: Dashboard,
     meta: {
       requiresAuth: true
+    },
+    props: {
+      dashboard: true
     }
   },
+    {
+      path: '/user/:id',
+      name: 'profile',
+      component: Dashboard,
+      meta: {
+        requiresAuth: true
+      },
+      props: {
+        dashboard: false
+      }
+    },
   {
     path: '/login',
     name: 'Login',

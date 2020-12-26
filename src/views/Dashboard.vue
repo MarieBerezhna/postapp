@@ -13,7 +13,7 @@
                         <img :src="image? image : require('../assets/user.jpg')" :alt="user.name"
                             class="user-image img border border-warning rounded-circle" width="250" height="250"
                             :data-value="user.image">
-                        <div class="img-hover bg-dark text-light position-absolute" @click="uploadOpen()"
+                        <div v-if="dashboard" class="img-hover bg-dark text-light position-absolute" @click="uploadOpen()"
                             @mouseleave="hideImgHover($event)">
                             <div class="upload" v-if="image">
                                 {{ image.name }}
@@ -136,6 +136,9 @@
             return {
                 user: JSON.parse(localStorage.getItem('user'))
             }
+        },
+        props: {
+            dashboard: Boolean
         },
         computed: {
             social_icons() {
@@ -311,6 +314,8 @@
             if ($('#adminNav:visible').length) {
                  $('.admin')[0].click();
             }
+
+            console.log(this.dashboard);
         }
     }
 </script>
