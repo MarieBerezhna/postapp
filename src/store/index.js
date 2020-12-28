@@ -88,6 +88,7 @@ const actions = {
             const fd = new FormData();
             const file = document.getElementById('post-img').files[0];
             if (file) fd.append('0', file, file.name);
+            console.log(file);
             fd.append('data', JSON.stringify(post));
             axios({
                 url: `${apiBase}/posts`,
@@ -104,8 +105,7 @@ const actions = {
         console.log(commit);
         return new Promise((resolve, reject)=> {
             axios({
-                 //url: `${apiBase}/posts/${id}`,
-               url: `http://localhost:3000/api/posts/${id}`,
+                url: `${apiBase}/posts/${id}`,
                 method: 'GET'
             }).then(resp => {
                 
@@ -269,11 +269,7 @@ const mutations = {
         state.data = data;
     },
     new_post(state, post) { 
-        console.log(state.data.posts);
-        console.log(post);
-        
         state.data.posts.push(post);
-        console.log(state.data.posts);
     },
     update_user(state, user) {
         let localuser = user;
