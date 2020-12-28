@@ -9,7 +9,7 @@ const proceed_login = (commit, resp, resolve, reject) => {
     if (!resp.data.error) {
         const token = resp.data.data.token;
         const user = resp.data.data.user;
-        console.log(user.image);
+        console.log(user.social);
         if (user.image) {
             user.image = `${apiBase}/users/avatar/${user.id}/${user.image}`;
         }
@@ -89,7 +89,6 @@ const actions = {
             const fd = new FormData();
             fd.append('0', file, file.name);
             fd.append('data', JSON.stringify(post));
-            console.log(file, post);
             axios({
                 url: `${apiBase}/posts`,
                 data: fd,
@@ -101,7 +100,21 @@ const actions = {
         });
 
     },
-
+    get_post({
+        commit
+    }, id) {
+        console.log(commit);
+        return new Promise((resolve, reject)=> {
+            axios({
+                 //url: `${apiBase}/posts/${id}`,
+               url: `http://localhost:3000/api/posts/${id}`,
+                method: 'GET'
+            }).then(resp => {
+                console.log(resp);
+                resolve(resp);
+            }).catch(err => reject(err));
+        });
+    },
     update_avatar({
         commit
     }, id) {

@@ -84,4 +84,8 @@ textarea {
 .btn[type="submit"] {
   background-color: $yellow;
 }
+.post > a {
+    color: rgb(24, 15, 15);
+    text-decoration: none;
+}
 </style>

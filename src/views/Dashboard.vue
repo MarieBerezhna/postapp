@@ -142,28 +142,7 @@
         },
         computed: {
             social_icons() {
-                return this.user.social ? JSON.parse(this.user.social) : [
-                    {
-                        prefix: "facebook-f",
-                        name: "Facebook",
-                        url: ""
-                    },
-                    {
-                        prefix: "linkedin-in",
-                        name: "LinkedIn",
-                        url: ""
-                    },
-                    {
-                        prefix: "instagram",
-                        name: "Instagram",
-                        url: ""
-                    },
-                    {
-                        prefix: "github",
-                        name: "GitHub",
-                        url: ""
-                    }
-                ];
+                return JSON.parse(this.user.social)[0];
             },
             name() {
                 return this.user.name ? this.user.name : 'Add username';
@@ -314,8 +293,6 @@
             if ($('#adminNav:visible').length) {
                  $('.admin')[0].click();
             }
-
-            console.log(this.dashboard);
         }
     }
 </script>

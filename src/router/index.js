@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import MainFeed from '@/views/Feed.vue';
+import SinglePostPage from '@/components/SinglePostPage';
 const Dashboard = () => import('@/views/Dashboard');
 const Login = () => import('@/views/user/Login');
 const NotFound = () => import('@/views/404');
@@ -25,17 +26,17 @@ const routes = [{
       dashboard: true
     }
   },
-    {
-      path: '/user/:id',
-      name: 'profile',
-      component: Dashboard,
-      meta: {
-        requiresAuth: true
-      },
-      props: {
-        dashboard: false
-      }
+  {
+    path: '/user/:id',
+    name: 'profile',
+    component: Dashboard,
+    meta: {
+      requiresAuth: true
     },
+    props: {
+      dashboard: false
+    }
+  },
   {
     path: '/login',
     name: 'Login',
@@ -51,10 +52,14 @@ const routes = [{
       loginPage: false
     }
   },
-    {
-      path: '/verify/:id',
-      component: Verified,
-    },
+  {
+    path: '/verify/:id',
+    component: Verified,
+  },
+  {
+    path: '/post:id',
+    component: SinglePostPage
+  },
   {
     path: '*',
     component: NotFound
