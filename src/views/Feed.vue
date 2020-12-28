@@ -26,7 +26,7 @@
     computed: {
       posts() {
         let posts = this.$store.state.data.posts;
-        return posts;
+        return posts ? posts.reverse() : [];
       },
       categories() {
         return this.$store.state.data.cats;

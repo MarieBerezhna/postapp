@@ -1,6 +1,5 @@
 <template>
     <div class="container">
-        <!-- <SinglePost :post="this.post"/> -->
         <div class="post">
         <h3 class="p-3 mb-0 bg-warning text-bold">{{post.heading}}</h3>
             <div class="row">
@@ -26,12 +25,8 @@
 </template>
 
 <script>
-    //import SinglePost from '../components/SinglePost.vue'
     import formatDateTime from '../utils/formatDateTime';
     export default {
-        // components: {
-        //     SinglePost
-        // },
         data() {
             return {
                 id: this.$route.params.id,

@@ -81,7 +81,8 @@ import $ from 'jquery';
               cat: $('#cats').children("option:selected").val(),
               origin: this.origin,
               tags: this.tags,
-              user_id: this.user.id
+              user_id: this.user.id,
+              user_name: this.user.name
             }
             this.$store.dispatch('create_post', post)
                     .catch(err => console.log(err))

@@ -52,7 +52,7 @@ const actions = {
     }) {
         axios.get(`${apiBase}/init`)
             .then(response => {
-
+                
                 if (response) {
                     commit('SET_DATA', response.data.data);
                 } else {
@@ -85,24 +85,22 @@ const actions = {
     }, post) {
 
         return new Promise(() => {
-            const file = document.getElementById('post-img').files[0];
             const fd = new FormData();
-            fd.append('0', file, file.name);
+            const file = document.getElementById('post-img').files[0];
+            if (file) fd.append('0', file, file.name);
             fd.append('data', JSON.stringify(post));
             axios({
                 url: `${apiBase}/posts`,
                 data: fd,
                 method: 'POST'
             }).then(resp => {
-                console.log(resp);
-                commit('new_post', resp.data);
+                console.log(resp.data.data);
+                commit('new_post', resp.data.data);
             });
         });
 
     },
-    get_post({
-        commit
-    }, id) {
+    get_post({ commit }, id) {
         console.log(commit);
         return new Promise((resolve, reject)=> {
             axios({
@@ -110,7 +108,7 @@ const actions = {
                url: `http://localhost:3000/api/posts/${id}`,
                 method: 'GET'
             }).then(resp => {
-                console.log(resp);
+                
                 resolve(resp);
             }).catch(err => reject(err));
         });
@@ -270,8 +268,12 @@ const mutations = {
         }
         state.data = data;
     },
-    new_post(state, data) {
-        console.log(data);
+    new_post(state, post) { 
+        console.log(state.data.posts);
+        console.log(post);
+        
+        state.data.posts.push(post);
+        console.log(state.data.posts);
     },
     update_user(state, user) {
         let localuser = user;

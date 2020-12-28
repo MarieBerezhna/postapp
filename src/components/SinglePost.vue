@@ -43,7 +43,6 @@
         },
         methods: {
             getCat(cat) { 
-                console.log(cat);
                 return this.$store.state.data.cats ? getCat(this.$store.state.data.cats, cat) : cat;
             },
             parseTags(tags) {
