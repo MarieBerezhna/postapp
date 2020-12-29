@@ -102,6 +102,23 @@ const actions = {
         });
 
     },
+    comment({commit}, data) {
+        console.log(commit, data);
+        return new Promise((resolve, reject)=> {
+        axios({
+            url: `http://localhost:3000/api/comment`,
+            // url: `${apiBase}/posts`,
+            data,
+            method: 'POST'
+        }).then(resp => {
+            console.log(resp);
+            commit('new_comment', resp);
+            resolve(resp);
+        }).catch((err) => {
+            reject(err);
+        });
+    });
+    },
     get_post({ commit }, id) {
         console.log(commit);
         return new Promise((resolve, reject)=> {
@@ -110,7 +127,7 @@ const actions = {
                 //url: `http://localhost:3000/api/posts/${id}`,
                 method: 'GET'
             }).then(resp => {
-                
+
                 resolve(resp);
             }).catch(err => reject(err));
         });
@@ -272,6 +289,10 @@ const mutations = {
     },
     new_post(state, post) { 
         state.data.posts.push(post);
+    },
+    new_comment(state, comment) {
+        //add to user dashboard
+        console.log(state, comment);
     },
     update_user(state, user) {
         let localuser = user;
