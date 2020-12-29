@@ -91,7 +91,8 @@ const actions = {
             console.log(file);
             fd.append('data', JSON.stringify(post));
             axios({
-                url: `${apiBase}/posts`,
+                url: `http://localhost:3000/api/posts`,
+                // url: `${apiBase}/posts`,
                 data: fd,
                 method: 'POST'
             }).then(resp => {
@@ -106,6 +107,7 @@ const actions = {
         return new Promise((resolve, reject)=> {
             axios({
                 url: `${apiBase}/posts/${id}`,
+                //url: `http://localhost:3000/api/posts/${id}`,
                 method: 'GET'
             }).then(resp => {
                 

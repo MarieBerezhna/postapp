@@ -84,8 +84,12 @@ textarea {
 .btn[type="submit"] {
   background-color: $yellow;
 }
-.post > a {
+.post-inner > a {
     color: rgb(24, 15, 15);
+    text-decoration: none;
+}
+.post-inner > a:hover {
+    color: rgb(80, 46, 46);
     text-decoration: none;
 }
 </style>

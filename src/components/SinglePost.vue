@@ -1,5 +1,5 @@
 <template>
-    <div class="post">
+    <div class="post-inner">
         <a :href="`/post${post.id}`">
         <h3 class="p-3 mb-0 bg-warning text-bold">{{post.heading}}</h3>
         </a>
