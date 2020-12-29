@@ -118,15 +118,28 @@ const actions = {
         });
     });
     },
-    get_post({ commit }, id) {
-        console.log(commit);
+    rm_comment({commit}, id) {
+        console.log(commit, id);
         return new Promise((resolve, reject)=> {
             axios({
-                url: `${apiBase}/posts/${id}`,
-                //url: `http://localhost:3000/api/posts/${id}`,
+               // url: `${apiBase}/comment/${id}`,
+                url: `http://localhost:3000/api/comment/${id}`,
+                method: 'DELETE'
+            }).then(resp => {
+                console.log(resp);
+                resolve(resp);
+            }).catch(err => reject(err));
+        });
+    },
+    get_post({ commit }, id) {
+        return new Promise((resolve, reject)=> {
+            axios({
+                //url: `${apiBase}/posts/${id}`,
+                url: `http://localhost:3000/api/posts/${id}`,
                 method: 'GET'
             }).then(resp => {
-
+                console.log(resp);
+                commit('get_post');
                 resolve(resp);
             }).catch(err => reject(err));
         });
@@ -286,6 +299,7 @@ const mutations = {
         }
         state.data = data;
     },
+    get_post(){},
     new_post(state, post) { 
         state.data.posts.push(post);
     },
