@@ -111,7 +111,6 @@ const actions = {
             data,
             method: 'POST'
         }).then(resp => {
-            console.log(resp);
             commit('new_comment', resp);
             resolve(resp);
         }).catch((err) => {

@@ -66,7 +66,6 @@
                     this.$store.dispatch('comment', comment).then((res) => {
                         console.log(res);
                     }).catch(err => console.log(err));
-                    console.log('comment');
                 }
 
             }
@@ -74,6 +73,7 @@
         async mounted() {
             await this.$store.dispatch("get_post", this.id).then(resp => {
                 this.post = resp.data.post;
+                console.log(resp.data.post);
             }).catch(err => console.log(err));
         }
     }
