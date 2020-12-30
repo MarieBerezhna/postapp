@@ -9,7 +9,6 @@ const proceed_login = (commit, resp, resolve, reject) => {
     if (!resp.data.error) {
         const token = resp.data.data.token;
         const user = resp.data.data.user;
-        console.log(user.social);
         if (user.image) {
             user.image = `${apiBase}/users/avatar/${user.id}/${user.image}`;
         }
@@ -106,8 +105,8 @@ const actions = {
         console.log(commit, data);
         return new Promise((resolve, reject)=> {
         axios({
-            url: `http://localhost:3000/api/comment`,
-            // url: `${apiBase}/posts`,
+           // url: `http://localhost:3000/api/comment`,
+            url: `${apiBase}/comment`,
             data,
             method: 'POST'
         }).then(resp => {
@@ -122,8 +121,8 @@ const actions = {
         console.log(commit, id);
         return new Promise((resolve, reject)=> {
             axios({
-               // url: `${apiBase}/comment/${id}`,
-                url: `http://localhost:3000/api/comment/${id}`,
+               url: `${apiBase}/comment/${id}`,
+                //url: `http://localhost:3000/api/comment/${id}`,
                 method: 'DELETE'
             }).then(resp => {
                 console.log(resp);
@@ -134,8 +133,8 @@ const actions = {
     get_post({ commit }, id) {
         return new Promise((resolve, reject)=> {
             axios({
-                //url: `${apiBase}/posts/${id}`,
-                url: `http://localhost:3000/api/posts/${id}`,
+                url: `${apiBase}/posts/${id}`,
+               // url: `http://localhost:3000/api/posts/${id}`,
                 method: 'GET'
             }).then(resp => {
                 console.log(resp);
