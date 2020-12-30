@@ -13,8 +13,8 @@
                         <img :src="image? image : require('../assets/user.jpg')" :alt="user.name"
                             class="user-image img border border-warning rounded-circle" width="250" height="250"
                             :data-value="user.image">
-                        <div v-if="dashboard" class="img-hover bg-dark text-light position-absolute" @click="uploadOpen()"
-                            @mouseleave="hideImgHover($event)">
+                        <div v-if="dashboard" class="img-hover bg-dark text-light position-absolute"
+                            @click="uploadOpen()" @mouseleave="hideImgHover($event)">
                             <div class="upload" v-if="image">
                                 {{ image.name }}
                             </div>
@@ -32,7 +32,7 @@
                         <font-awesome-icon :icon="['fas', 'edit']" @click="toggleBio($event)"
                             class="position-absolute  edit-btn mt-1 mx-1" style="right:0;" />
                     </div>
-                </div> 
+                </div>
                 <div class="col-12 col-md-6">
                     <div v-if="!allowed" class="not-verified font-weight-light text-muted">
                         Hey there! Your account is pending verification... <br>
@@ -42,8 +42,7 @@
                     <div class="user-meta text-left mt-md-3 text-center">
                         <div class="form-group position-relative">
                             <label for="username"></label>
-                            <input type="text" id="username" class="w-75 w-md-100" 
-                            :placeholder="'Usename: ' + name"
+                            <input type="text" id="username" class="w-75 w-md-100" :placeholder="'Usename: ' + name"
                                 :value="name" disabled>
 
                             <font-awesome-icon :icon="['fas', 'check']" @click="disableInputAndSend($event)"
@@ -95,7 +94,9 @@
                         <p v-if="!comments">
                             You don't have any comments yet :(
                         </p>
-
+                        <div v-else>
+                            <CommentsBox :comments="comments" :user="user" />
+                        </div>
                     </div>
                 </div>
                 <div class="col-12 col-md-7 border p-2">
@@ -106,10 +107,7 @@
                         </p>
                         <div v-else>
                             <div class="row" v-for="post in posts" :key="post.id">
-                                <div class="col"><a href="">{{ post.heading }}</a></div>
-                                <div class="col">{{ getCatName(post.cat) }}</div>
-                                <div class="col">{{ post.tags }}</div>
-                                <div class="col">{{ getDateTime(post.datetime) }}</div>
+                                  <SinglePost class="w-100" :post="post"/>
                             </div>
                         </div>
                     </div>
@@ -122,6 +120,8 @@
     </div>
 </template>
 <script>
+  import SinglePost from '../components/SinglePost.vue';
+  import CommentsBox from '../components/CommentsBox';
     import getCat from '../utils/getCatName';
     import formatDateTime from '../utils/formatDateTime';
     import $ from 'jquery'
@@ -130,7 +130,9 @@
     export default {
         components: {
             changePass,
-            deleteAccount
+            deleteAccount,
+            SinglePost,
+            CommentsBox,
         },
         data() {
             return {
@@ -154,13 +156,16 @@
                 return this.user.image ? this.user.image : null;
             },
             posts() {
-                return this.user.posts
+                let posts = this.$store.state.data.posts;
+                return posts ? posts.filter(post => post.user_id === this.user.id).slice(0, 6).reverse() : [];
             },
             comments() {
-                return this.user.comments
+                let comments = this.$store.state.data.comments;
+                return comments ? comments.filter(row => row.user_id === this.user.id).slice(0, 6).reverse() : [];
             },
             allowed() {
-                return localStorage.user ? (JSON.parse(localStorage.user).verified ? JSON.parse(localStorage.user).verified : false) : false;
+                return localStorage.user ? (JSON.parse(localStorage.user).verified ? JSON.parse(localStorage.user)
+                    .verified : false) : false;
             }
         },
         methods: {
@@ -168,9 +173,9 @@
                 $('#image-input').click();
             },
             avatarUpload() {
-                this.$store.dispatch('update_avatar', this.user.id).then(()=>{
-                    $('.user-image').attr('src', JSON.parse(localStorage.user).image);
-                })
+                this.$store.dispatch('update_avatar', this.user.id).then(() => {
+                        $('.user-image').attr('src', JSON.parse(localStorage.user).image);
+                    })
                     .catch(err => console.log(err))
             },
             toggleBio(e) {
@@ -289,10 +294,12 @@
                 return getCat(this.$store.state.data.cats, cat_id);
             }
         },
-        mounted () {
+        mounted() {
+
             if ($('#adminNav:visible').length) {
-                 $('.admin')[0].click();
+                $('.admin')[0].click();
             }
+
         }
     }
 </script>
@@ -325,6 +332,7 @@
         img {
             z-index: -1;
         }
+
         .img-hover {
             z-index: 0;
             bottom: 50%;

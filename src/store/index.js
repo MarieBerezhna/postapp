@@ -296,6 +296,7 @@ const mutations = {
         for (var i = 0; i < data.posts.length; i++) {
             data.posts[i].shortened = shortenText(data.posts[i].text);
         }
+        console.log(data);
         state.data = data;
     },
     get_post(){},
@@ -304,7 +305,8 @@ const mutations = {
     },
     new_comment(state, comment) {
         //add to user dashboard
-        console.log(state, comment);
+        state.data.comments.push(comment);
+        console.log(state.data, comment);
     },
     update_user(state, user) {
         let localuser = user;

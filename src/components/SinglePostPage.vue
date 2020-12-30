@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="post border bg-light" :data-id="post.id">
-            <h3 class="p-3 mb-0 bg-warning text-bold">{{post.heading}}</h3>
+            <h3 class="p-3 my-0 bg-warning text-bold post-heading">{{post.heading}}</h3>
             <div class="row">
                 <div class="col-12 col-md-6 p-3">
                     <img :src="post.image" :alt="post.tags" width="100%">
@@ -23,23 +23,7 @@
             <div class="row comments p-3 border-top">
 
                 <div class="col-12">
-                    <div class="row mb-5 comment-box" v-for="comment in comments" :key="comment.id" :data-id="comment.id">
-                        <img :src="comment.user_img ? comment.user_img : require('../assets/user.jpg')" alt=""
-                            class="mx-auto d-block user-img p-0 col-2 col-md-1 rounded-circle">
-                        <div class="position-relative col-11 offset-1 pb-3 pl-5 border bg-white comment">
-                            <h5 class="w-100">{{comment.user_name}} 
-                                <span class="text-secondary d-inline-block mr-3" style="font-size: 0.9rem; float: right">{{comment.datetime}}</span> </h5>
-                            <div class="comment-text pb-2">
-                                {{ comment.text }}
-                                <div class="position-absolute buttons w-100" v-if="user" :data-id="comment.id">
-                                    <span class=" btn bg-secondary text-white border py-0 mx-3">Reply</span>
-                                    <span @click="rmComment($event)"
-                                        class=" btn bg-secondary text-white border py-0 mx-3">Delete</span>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <CommentsBox :comments="comments" :user="user"/>
                 </div>
                 <div class="col-12 comment-form">
                     <form action="">
@@ -60,6 +44,7 @@
 </template>
 
 <script>
+import CommentsBox from './CommentsBox';
     import formatDateTime from '../utils/formatDateTime';
     export default {
         data() {
@@ -69,6 +54,9 @@
                 post: {},
                 comments: []
             }
+        },
+        components: {
+            CommentsBox,
         },
         methods: {
             parseTags(tags) {
@@ -121,9 +109,7 @@
     .container {
         margin-top: -50px;
     }
-    h5 > span {
-        font-size: .8rem;
-    }
+
     .comment-form .btn {
         display: block;
         width: 250px;
@@ -142,17 +128,6 @@
     .comment-form .btn {
         border-radius: 30px;
     }
-    .post > h3 {
-        border-top-left-radius: 30px;
-        border-top-right-radius: 30px;
-    }
-    .buttons {
-        bottom: -20px;
-        left: 0;
-    }
 
-    .buttons .btn {
-        width: auto;
-        border-radius: 30px;
-    }
+
 </style>

@@ -84,6 +84,7 @@ textarea {
 .btn[type="submit"] {
   background-color: $yellow;
 }
+
 .post-inner > a {
     color: rgb(24, 15, 15);
     text-decoration: none;
@@ -92,4 +93,26 @@ textarea {
     color: rgb(80, 46, 46);
     text-decoration: none;
 }
+    .post, .post-heading {
+        border-top-left-radius: 30px;
+        border-top-right-radius: 30px;
+    }
+    .post, .post-inner {
+              border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+    }
+    .btn {
+      border-radius: 30px !important;
+    }
+    .radius {
+      border-radius: 30px;
+    }
+    .radius-top {
+              border-top-left-radius: 30px;
+        border-top-right-radius: 30px;
+    }
+    .radius-bottom {
+                    border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+    }
 </style>

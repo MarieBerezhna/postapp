@@ -1,9 +1,9 @@
 <template>
-    <div class="post-inner">
+    <div class="post-inner bg-light radius">
         <a :href="`/post${post.id}`">
-        <h3 class="p-3 mb-0 bg-warning text-bold">{{post.heading}}</h3>
+        <h3 class="p-3 mb-0 bg-warning text-bold post-heading">{{post.heading}}</h3>
         </a>
-        <div class="row">
+        <div class="row p-3">
             <div class="col-12 col-md-6 p-0">
                 <img :src="post.image" :alt="post.tags" width="100%">
                 <div class="meta">
@@ -52,17 +52,16 @@
                 return formatDateTime(datetime)
             },
             toggleText: function (e, id) {
-                let post = this.posts.filter(post => post.id === id)[0];
                 let postDiv = $(`.post[data-id="${id}"]`).find('.post-text');
                 if ($(e.target).hasClass('show')) {
-                    $(postDiv).html(post.text);
+                    $(postDiv).html(this.post.text);
                     $(e.target).removeClass('show')
                         .addClass('hide').text('Show less');
 
                 } else {
                     $(e.target).removeClass('hide')
                         .addClass('show').text('Read more');
-                    $(postDiv).html(post.shortened);
+                    $(postDiv).html(this.post.shortened);
                 }
             }
         }
