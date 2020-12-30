@@ -51,7 +51,7 @@ const actions = {
     }) {
         axios.get(`${apiBase}/init`)
             .then(response => {
-                
+
                 if (response) {
                     commit('SET_DATA', response.data.data);
                 } else {
@@ -86,14 +86,13 @@ const actions = {
         return new Promise(() => {
             const fd = new FormData();
             const file = document.getElementById('post-img').files[0];
-            if (file) fd.append('0', file, file.name);
-            console.log(file);
-            fd.append('data', JSON.stringify(post));
+            if (file) fd.append('pic', file);
+            fd.append('post', JSON.stringify(post));
             axios({
-                url: `http://localhost:3000/api/posts`,
-                // url: `${apiBase}/posts`,
+                //url: `http://localhost:3000/api/posts/${post.user_id}`,
+                url: `${apiBase}/posts/${post.user_id}`,
                 data: fd,
-                method: 'POST'
+                method: 'POST',
             }).then(resp => {
                 console.log(resp.data.data);
                 commit('new_post', resp.data.data);
@@ -101,27 +100,47 @@ const actions = {
         });
 
     },
-    comment({commit}, data) {
-        console.log(commit, data);
-        return new Promise((resolve, reject)=> {
-        axios({
-           // url: `http://localhost:3000/api/comment`,
-            url: `${apiBase}/comment`,
-            data,
-            method: 'POST'
-        }).then(resp => {
-            commit('new_comment', resp);
-            resolve(resp);
-        }).catch((err) => {
-            reject(err);
-        });
-    });
-    },
-    rm_comment({commit}, id) {
-        console.log(commit, id);
-        return new Promise((resolve, reject)=> {
+    rm_post({
+        commit
+    }, id) {
+        console.log(commit);
+        return new Promise((resolve, reject) => {
             axios({
-               url: `${apiBase}/comment/${id}`,
+                url: `${apiBase}/posts/${id}`,
+                method: 'DELETE'
+            }).then((resp) => {
+                commit('rm_post', id);
+                resolve(resp);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    },
+    comment({
+        commit
+    }, data) {
+        console.log(commit, data);
+        return new Promise((resolve, reject) => {
+            axios({
+                // url: `http://localhost:3000/api/comment`,
+                url: `${apiBase}/comment`,
+                data,
+                method: 'POST'
+            }).then(resp => {
+                commit('new_comment', resp);
+                resolve(resp);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    },
+    rm_comment({
+        commit
+    }, id) {
+        console.log(commit, id);
+        return new Promise((resolve, reject) => {
+            axios({
+                url: `${apiBase}/comment/${id}`,
                 //url: `http://localhost:3000/api/comment/${id}`,
                 method: 'DELETE'
             }).then(resp => {
@@ -130,14 +149,15 @@ const actions = {
             }).catch(err => reject(err));
         });
     },
-    get_post({ commit }, id) {
-        return new Promise((resolve, reject)=> {
+    get_post({
+        commit
+    }, id) {
+        return new Promise((resolve, reject) => {
             axios({
                 url: `${apiBase}/posts/${id}`,
-               // url: `http://localhost:3000/api/posts/${id}`,
+                // url: `http://localhost:3000/api/posts/${id}`,
                 method: 'GET'
             }).then(resp => {
-                console.log(resp);
                 commit('get_post');
                 resolve(resp);
             }).catch(err => reject(err));
@@ -150,14 +170,13 @@ const actions = {
             const file = document.getElementById('image-input').files[0];
             const fd = new FormData();
             fd.append('avatar', file);
-             axios.post(`${apiBase}/users/avatar/${id}`, fd, {
-              //axios.post(`http://localhost:3000/api/users/avatar/${id}`, fd, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
+            axios.post(`${apiBase}/users/avatar/${id}`, fd, {
+                    //axios.post(`http://localhost:3000/api/users/avatar/${id}`, fd, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
                 .then(resp => {
-                    console.log(resp);
                     commit('new_avatar', file.name);
                     resolve(resp);
                 }).catch(err => {
@@ -290,18 +309,26 @@ const mutations = {
         let shortenText = function (value) {
             let dots = value.length < 300 ? '' : '...';
             let index = 300;
-            let visible = value.slice(0, index) +  dots;
+            let visible = value.slice(0, index) + dots;
             return visible;
-    };
+        };
         for (var i = 0; i < data.posts.length; i++) {
             data.posts[i].shortened = shortenText(data.posts[i].text);
+            console.log(data.posts[i]);
+            data.posts[i].image = data.posts[i].image ? `${apiBase}/postimage/${data.posts[i].user_id}/${data.posts[i].image}` : '';
         }
-        console.log(data);
         state.data = data;
     },
-    get_post(){},
-    new_post(state, post) { 
+    get_post() {},
+    new_post(state, post) {
         state.data.posts.push(post);
+    },
+    rm_post(state, id) {
+        let index = state.data.posts.map((item) => item.id).indexOf(id);
+        if (index > -1) {
+            state.data.posts.splice(index, 1);
+            console.log("Result", state.data.posts);
+        }
     },
     new_comment(state, comment) {
         //add to user dashboard

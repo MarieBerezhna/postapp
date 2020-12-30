@@ -1,7 +1,12 @@
 <template>
     <div class="container">
         <div class="post border bg-light" :data-id="post.id">
-            <h3 class="p-3 my-0 bg-warning text-bold post-heading">{{post.heading}}</h3>
+            <h3 class="p-3 my-0 bg-warning text-bold post-heading">{{post.heading}}
+                  <img class="rm-post" 
+                  @click="rmPost($event)" 
+                  :src="require('../assets/cancel.png')" alt="delete" title="delete">
+                  </h3>
+
             <div class="row">
                 <div class="col-12 col-md-6 p-3">
                     <img :src="post.image" :alt="post.tags" width="100%">
@@ -64,6 +69,12 @@ import CommentsBox from './CommentsBox';
             },
             datetime: function (datetime) {
                 return datetime ? formatDateTime(datetime) : '';
+            },
+            rmPost (e) {
+                let post_id = e.target.parentNode.parentNode.getAttribute('data-id')
+                console.log(post_id);
+                this.$store.dispatch('rm_post', post_id);
+                location = '/';
             },
             comment() {
                 let comment = {
@@ -128,6 +139,11 @@ import CommentsBox from './CommentsBox';
     .comment-form .btn {
         border-radius: 30px;
     }
-
+.rm-post {
+    float: right;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
 
 </style>

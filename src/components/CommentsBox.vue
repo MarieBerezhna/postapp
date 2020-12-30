@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row mb-5 comment-box" v-for="comment in comments" :key="comment.id" :data-id="comment.id">
+        <div class="row mb-5 comment-box my-2" v-for="comment in comments" :key="comment.id" :data-id="comment.id">
             <img :src="comment.user_img ? comment.user_img : require('../assets/user.jpg')" :alt="comment.user_name"
                 class="mx-0 d-block user-img p-0 col-2 col-md-1 rounded-circle">
             <div class="position-relative col-12  pb-3 pl-5 border radius bg-white comment">

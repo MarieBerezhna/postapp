@@ -79,7 +79,6 @@ import $ from 'jquery';
               heading: this.heading,
               text: this.text,
               cat: $('#cats').children("option:selected").val(),
-              origin: this.origin,
               tags: this.tags,
               user_id: this.user.id,
               user_name: this.user.name

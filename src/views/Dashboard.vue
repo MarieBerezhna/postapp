@@ -88,7 +88,7 @@
                 </div>
             </div>
             <div class="row mt-4 pt-3">
-                <div class="col-12 col-md-5 border p-2">
+                <div class="col-12 col-md-5 p-2">
                     <h2 class="border-bottom text-center">Your latest comments:</h2>
                     <div class="comments p-2">
                         <p v-if="!comments">
@@ -99,14 +99,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-md-7 border p-2">
+                <div class="col-12 col-md-7 p-2">
                     <h2 class="border-bottom text-center">Your latest posts:</h2>
                     <div class="posts p-2">
                         <p v-if="!posts">
                             You don't have any posts yet :(
                         </p>
                         <div v-else>
-                            <div class="row" v-for="post in posts" :key="post.id">
+                            <div class="row my-2" v-for="post in posts" :key="post.id">
                                   <SinglePost class="w-100" :post="post"/>
                             </div>
                         </div>
