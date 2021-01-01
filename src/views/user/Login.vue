@@ -5,10 +5,13 @@
         <form action="#" method="post" @submit.prevent="formSubmit()"
             class="col-12 col-md-4 mx-auto">
             <div class="row">
+                <div v-if="!this.loginPage" class="col-12 form-group">
+                    <label for="username"></label>
+                    <input v-model="username" type="text" class="form-control" placeholder="Username" name="username" required>
+                </div>
                 <div class="col-12 form-group">
                     <label for="email"></label>   
-                    <input v-model="email" type="text" class="form-control" placeholder="Email" name="email" required>
-                   
+                    <input v-model="email" type="text" class="form-control" placeholder="Email" name="email" required> 
                 </div>
                 <div class="col-12 form-group">
                     <label for="psw"></label>
@@ -39,6 +42,7 @@
                 email: "",
                 password: "",
                 password_confirmation: "",
+                username: ""
             }
         },
         computed: {
@@ -69,7 +73,8 @@
             register: function () {
                 let data = {
                     email: this.email,
-                    password: this.password
+                    password: this.password,
+                    username: this.username
                 }
                 if (data.password !== this.password_confirmation) {
                     this.$store.state.warning = "Passwords don't match"

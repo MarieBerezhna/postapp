@@ -38,7 +38,7 @@
                 <div class="col-12">
                     <CommentsBox :comments="comments" :user="user" />
                 </div>
-                <div v-if="user"  class="col-12 comment-form">
+                <div v-if="user && user.verified"  class="col-12 comment-form">
                     <form action="">
                         <div class="row position-relative my-1">
                             <img :src="user.image" alt="" class="d-block user-img p-0 col-2 col-md-1 rounded-circle">
@@ -46,9 +46,12 @@
                             <textarea placeholder="Have some thoughts about it? Share with us!" name="" id=""
                                 class="col-8 offset-1 pl-4 col-md-11 border"></textarea>
                         </div>
-
+                       
                         <button class="btn" type="submit" @click.prevent="comment()">Comment</button>
                     </form>
+                </div>
+                <div v-else-if="user">
+                    Please, verify your e-mail in order to comment.
                 </div>
                 <div v-else>
                     In order to comment, please, <a href="/login">log in</a>.

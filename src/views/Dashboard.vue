@@ -147,7 +147,7 @@
                 return JSON.parse(this.user.social)[0];
             },
             name() {
-                return this.user.name ? this.user.name : 'Add username';
+                return this.user.name ? this.user.name : '';
             },
             bio() {
                 return this.user.bio ? this.user.bio : ' ... ';
