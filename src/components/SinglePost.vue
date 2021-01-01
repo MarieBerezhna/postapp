@@ -1,31 +1,37 @@
 <template>
     <div class="post-inner bg-light radius">
         <a :href="`/post${post.id}`">
-        <h3 class="p-3 mb-0 bg-warning text-bold post-heading">{{post.heading}}</h3>
+            <h3 class="p-3 mb-0 bg-warning text-bold post-heading">{{post.heading}}</h3>
         </a>
-        <div class="row p-3">
-            <div class="col-12 col-md-6 p-0">
-                <img :src="post.image" :alt="post.tags" width="100%">
-                <div class="meta">
-                    <span class="text-danger post-category" :data-id="post.cat">
+        <div class="row">
+            <div class="col-12 p-0">
+                <a href="">
+<img v-if="post.image" :src="post.image" :alt="post.tags" width="100%" class="rounded">
+                </a>
+                
+                <div class="meta px-3 border-bottom row">
+                    <img class="user-img rounded-circle" :src="post.user_image" :alt="'author: ' + post.user_name">
+                    <span class="col-4 offset-2">{{post.user_name}}</span>
+                    <span class="col-3 text-danger post-category" :data-id="post.cat">
                         {{ getCat(post.cat) }}
                     </span>
-                    <span v-for="tag in parseTags(post.tags)" :key="tag.index" class="text-success">
-                        #{{ tag }}
-                    </span>
-                    <br>
-                    <span> {{ datetime(post.datetime) }}</span>
-                    <br>
+                    <span class="col-3"> {{ datetime(post.datetime) }}</span>
+                    <div class="col-12">
+                        <span v-for="tag in parseTags(post.tags)" :key="tag.index" class="text-success">
+                            #{{ tag }}
+                        </span>
+                    </div>
                 </div>
 
             </div>
-            <div v-html="post.shortened" class="col-12 col-md-6 p-3 post-text text-justify">
+            <div v-html="post.shortened" class="col-12 p-3 post-text text-justify">
             </div>
         </div>
         <div class="row" v-if="post.text.length >= 300">
             <div @click="toggleText($event, post.id)" class="show btn btn-success mx-auto my-3 col-10 col-md-4">Read
                 more</div>
         </div>
+        <span class="pl-3">{{ post.views ? post.views : 0 }} views</span>
     </div>
 
 </template>
@@ -39,10 +45,12 @@
             post: Object
         },
         computed: {
-            posts() { return this.$store.state.data}
+            posts() {
+                return this.$store.state.data
+            }
         },
         methods: {
-            getCat(cat) { 
+            getCat(cat) {
                 return this.$store.state.data.cats ? getCat(this.$store.state.data.cats, cat) : cat;
             },
             parseTags(tags) {
@@ -69,5 +77,7 @@
 </script>
 
 <style lang="scss" scoped>
-
+    .user-img {
+        margin-top: -25px
+    }
 </style>

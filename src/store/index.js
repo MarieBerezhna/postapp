@@ -94,7 +94,6 @@ const actions = {
                 data: fd,
                 method: 'POST',
             }).then(resp => {
-                console.log(resp.data.data);
                 commit('new_post', resp.data.data);
             });
         });
@@ -106,7 +105,8 @@ const actions = {
         console.log(commit);
         return new Promise((resolve, reject) => {
             axios({
-                url: `${apiBase}/posts/${id}`,
+               //url: `http://localhost:3000/api/posts/${id}`,
+               url: `${apiBase}/posts/${id}`,
                 method: 'DELETE'
             }).then((resp) => {
                 commit('rm_post', id);
@@ -159,6 +159,7 @@ const actions = {
                 method: 'GET'
             }).then(resp => {
                 commit('get_post');
+                resp.data.post.image = `${apiBase}/postimage/${resp.data.post.user_id}/${resp.data.post.image}`;
                 resolve(resp);
             }).catch(err => reject(err));
         });
@@ -314,13 +315,14 @@ const mutations = {
         };
         for (var i = 0; i < data.posts.length; i++) {
             data.posts[i].shortened = shortenText(data.posts[i].text);
-            console.log(data.posts[i]);
             data.posts[i].image = data.posts[i].image ? `${apiBase}/postimage/${data.posts[i].user_id}/${data.posts[i].image}` : '';
         }
         state.data = data;
     },
     get_post() {},
     new_post(state, post) {
+        console.log(post);
+        post.image = `${apiBase}/postimage/${post.user_id}/${post.image}`;
         state.data.posts.push(post);
     },
     rm_post(state, id) {

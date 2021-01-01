@@ -93,6 +93,13 @@ textarea {
     color: rgb(80, 46, 46);
     text-decoration: none;
 }
+    .user-img {
+        position: absolute;
+        z-index: 100;
+        height: 50px;
+        width: 50px;
+        border: 1px solid $yellow;
+    }
     .post, .post-heading {
         border-top-left-radius: 30px;
         border-top-right-radius: 30px;

@@ -38,6 +38,12 @@
                 {{ cat.name }}
               </option>
             </select>
+            <label for="tags"></label>
+            <textarea name="tags" id="tags" class="w-100 rounded my-2" 
+            placeholder="Add tags separated by spaces. 
+You ca also use #tags inside a post text.">
+              
+            </textarea>
           </div>
         </form>
       </div>
@@ -79,10 +85,20 @@ import $ from 'jquery';
               heading: this.heading,
               text: this.text,
               cat: $('#cats').children("option:selected").val(),
-              tags: this.tags,
+              tags: $('#tags').val().split(' '),
               user_id: this.user.id,
-              user_name: this.user.name
+              user_name: this.user.name,
+              user_image: this.user.image
             }
+            console.log(this.user.image);
+            let words = post.text.split(' ');
+            let tags = words.filter(word => word.indexOf('#') === 0);
+            tags = words.forEach((word) => word = word.replace('#', ''));
+
+            console.log(tags);
+            post.tags.concat(tags);
+            post.tags = post.tags.join(' ');
+            console.log(post.tags);
             this.$store.dispatch('create_post', post)
                     .catch(err => console.log(err))
           }
