@@ -54,7 +54,10 @@ const actions = {
     getData({
         commit
     }) {
-        axios.get(`${apiBase}/init`)
+        axios.get(
+            `${apiBase}/init`
+            //`http://localhost:3000/api/init`
+            )
             .then(response => {
 
                 if (response) {
@@ -327,8 +330,10 @@ const mutations = {
             return visible;
         };
         for (var i = 0; i < data.posts.length; i++) {
-            data.posts[i].shortened = shortenText(data.posts[i].text);
-            data.posts[i].image = completePostPic(data.posts[i].user_id, data.posts[i].image);
+            let post = data.posts[i];
+            post.shortened = shortenText(post.text);
+            post.image = completePostPic(post.user_id, post.image);
+            post.user_image = completeAvatar(post.user_id, post.user_image);
         }
         state.data = data;
     },

@@ -10,7 +10,7 @@
                 </a>
                 
                 <div class="meta px-3 border-bottom row">
-                    <!-- <img class="user-img rounded-circle" :src="post.user_image" :alt="'author: ' + post.user_name"> -->
+                    <img class="user-img rounded-circle" :src="post.user_image" :alt="'author: ' + post.user_name">
                     <span class="col-4 offset-2">{{post.user_name}}</span>
                     <span class="col-3 text-danger post-category" :data-id="post.cat">
                         {{ getCat(post.cat) }}
