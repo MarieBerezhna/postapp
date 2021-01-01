@@ -33,6 +33,7 @@
                 <div v-html="post.text" class="col-12  p-3 post-text text-justify">
                 </div>
             </div>
+                   <span class="pl-3">{{ post.views ? post.views + 1 : 0 }} views</span>
             <div class="row comments p-3 border-top">
 
                 <div class="col-12">

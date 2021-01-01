@@ -1,32 +1,34 @@
 <template>
     <div class="post-inner bg-light radius">
         <a :href="`/post${post.id}`">
-            <h3 class="p-3 mb-0 bg-warning text-bold post-heading">{{post.heading}}</h3>
+            <h3 class="p-3 mb-0 bg-warning text-bold post-heading text-center">{{post.heading}}</h3>
         </a>
-        <div class="row">
-            <div class="col-12 p-0">
-                <a href="">
-<img v-if="post.image" :src="post.image" :alt="post.tags" width="100%" class="rounded">
-                </a>
-                
-                <div class="meta px-3 border-bottom row">
-                    <img class="user-img rounded-circle" :src="post.user_image" :alt="'author: ' + post.user_name">
-                    <span class="col-4 offset-2">{{post.user_name}}</span>
-                    <span class="col-3 text-danger post-category" :data-id="post.cat">
-                        {{ getCat(post.cat) }}
-                    </span>
-                    <span class="col-3"> {{ datetime(post.datetime) }}</span>
-                    <div class="col-12">
-                        <span v-for="tag in parseTags(post.tags)" :key="tag.index" class="text-success">
-                            #{{ tag }}
+            <div class="row">
+                <div class="col-12 p-0">
+                     <a :href="`/post${post.id}`">
+                    <img v-if="post.image" :src="post.image" :alt="post.tags" width="100%" class="rounded">
+                    </a>
+                    <div class="meta px-3 border-bottom row">
+                        <a :href="'/user/' + post.user_name" class="col-4">
+                        <img v-if="location.href.indexOf('dashboard') === -1" class="user-img rounded-circle"
+                            :src="post.user_image" :alt="'author: ' + post.user_name">
+                        <span class="col-4 offset-4 text-dark">{{post.user_name}}</span>
+                        </a>
+                        <span class="col-3 text-danger post-category" :data-id="post.cat">
+                            {{ getCat(post.cat) }}
                         </span>
+                        <span class="col-3"> {{ datetime(post.datetime) }}</span>
+                        <div class="col-12">
+                            <span v-for="tag in parseTags(post.tags)" :key="tag.index" class="text-success">
+                                #{{ tag }}
+                            </span>
+                        </div>
                     </div>
                 </div>
+                <div v-html="post.shortened" class="col-12 p-3 post-text text-justify">
+                </div>
+            </div>
 
-            </div>
-            <div v-html="post.shortened" class="col-12 p-3 post-text text-justify">
-            </div>
-        </div>
         <div class="row" v-if="post.text.length >= 300">
             <div @click="toggleText($event, post.id)" class="show btn btn-success mx-auto my-3 col-10 col-md-4">Read
                 more</div>
@@ -43,6 +45,11 @@
     export default {
         props: {
             post: Object
+        },
+        data() {
+            return {
+                location: location
+            }
         },
         methods: {
             getCat(cat) {
@@ -73,6 +80,6 @@
 
 <style lang="scss" scoped>
     .user-img {
-        margin-top: -25px
+        margin-top: -15px
     }
 </style>

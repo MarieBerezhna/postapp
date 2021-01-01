@@ -5,10 +5,10 @@ import Vue from 'vue';
 const api = require('../../api');
 const apiBase = `${api.protocol}://${api.host}${api.baseUrl}`;
 const completeAvatar = (id, file) => {
-    return `${apiBase}/users/avatar/${id}/${file}`;
+    return (file && file.length)? `${apiBase}/users/avatar/${id}/${file}` : null;
 };
 const completePostPic = (id, file) => {
-    return  `${apiBase}/postimage/${id}/${file}`;
+    return  (file && file.length)? `${apiBase}/postimage/${id}/${file}` : null;
 };
 const proceed_login = (commit, resp, resolve, reject) => {
     if (!resp.data.error) {
@@ -80,6 +80,7 @@ const actions = {
     update_user({
         commit
     }, user) {
+        console.log(user.social);
         return new Promise((resolve, reject) => {
             axios({
                 url: `${apiBase}/users/${user.id}`,
@@ -176,6 +177,7 @@ const actions = {
             }).then(resp => {
                 commit('get_post');
                 resp.data.post.image = completePostPic(resp.data.post.user_id, resp.data.post.image);
+               // resp.data.post.user_image = completeAvatar(resp.data.post.user_id, resp.data.post.user_image);
                 resolve(resp);
             }).catch(err => reject(err));
         });
@@ -356,14 +358,13 @@ const mutations = {
         console.log(state.data, comment);
     },
     update_user(state, user) {
+       
         let localuser = user;
         let img = JSON.parse(localStorage.user).image;
         localuser.image = img;
         state.user = localuser;
     },
     new_avatar(state, path) {
-        //let user = JSON.parse(localStorage.user);
-        //state.user.image = completeAvatar(user.id, path);
         state.user.image = path;
         localStorage.setItem('user', JSON.stringify(state.user));
     },
