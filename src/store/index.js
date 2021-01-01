@@ -362,8 +362,9 @@ const mutations = {
         state.user = localuser;
     },
     new_avatar(state, path) {
-        let user = JSON.parse(localStorage.user);
-        state.user.image = completeAvatar(user.id, path);
+        //let user = JSON.parse(localStorage.user);
+        //state.user.image = completeAvatar(user.id, path);
+        state.user.image = path;
         localStorage.setItem('user', JSON.stringify(state.user));
     },
     auth_request(state) {

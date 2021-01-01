@@ -23,7 +23,7 @@
                         <textarea name="" cols="5" rows="3"
                             class="hidden w-75 mx-auto border rounded md-textarea form-control"></textarea>
                         <span id="user-bio" class="w-75 mx-auto">
-                            {{ bio }}
+                            {{ this.user.bio ? this.user.bio : ' ... ' }}
                         </span>
 
                         <font-awesome-icon :icon="['fas', 'check']" @click="toggleBio($event)"
@@ -156,7 +156,7 @@
                 return this.user.bio ? this.user.bio : ' ... ';
             },
             image() {
-                return this.user.image ? this.user.image : null;
+                return this.user.image ? this.user.image : '';
             },
             posts() {
                 let posts = this.$store.state.data.posts;
@@ -256,6 +256,7 @@
             updateUser: function () {
 
                 let social = {}
+                social["0"] = [];
                 $('.link').each((el) => {
                     let item = $('.link')[el];
                     let data = {
@@ -263,7 +264,7 @@
                         "prefix": $(item).attr('data-prefix'),
                         "url": $(item).attr('data-value')
                     }
-                    if (data) social[el] = data;
+                    if (data) social[0][el] = data;
                 })
 
                 const user = {
