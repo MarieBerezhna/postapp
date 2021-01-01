@@ -27,14 +27,14 @@ const routes = [{
     }
   },
   {
-    path: '/user/:id',
+    path: '/user/:name',
     name: 'profile',
     component: Dashboard,
     meta: {
       requiresAuth: true
     },
     props: {
-      dashboard: false
+      dashboard: false,
     }
   },
   {

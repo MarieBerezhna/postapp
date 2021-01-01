@@ -42,11 +42,9 @@
                     <form action="">
                         <div class="row position-relative my-1">
                             <img :src="user.image" alt="" class="d-block user-img p-0 col-2 col-md-1 rounded-circle">
-
                             <textarea placeholder="Have some thoughts about it? Share with us!" name="" id=""
                                 class="col-8 offset-1 pl-4 col-md-11 border"></textarea>
                         </div>
-                       
                         <button class="btn" type="submit" @click.prevent="comment()">Comment</button>
                     </form>
                 </div>

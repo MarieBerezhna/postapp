@@ -1,13 +1,12 @@
 <template>
     <div class="container">
-        <form class="user-box" v-if="Object.keys(user).length" :id="user.id" method="POST"
-            enctype="multipart/form-data">
+        <form class="user-box" v-if="Object.keys(user).length" :id="user.id">
             <input @change="avatarUpload($event)" type="file" id="image-input" name="avatar"
                 accept="image/png, image/jpeg">
             <div class="row">
 
                 <div class="col-12 col-md-6  text-center">
-                    <div @mouseover="imgHover($event)" @mouseleave="hideImgHover($event)"
+                    <div v-if="this.dashboard" @mouseover="imgHover($event)" @mouseleave="hideImgHover($event)"
                         class="img-box border border-warning rounded-circle mb-3 mx-auto position-relative">
 
                         <img :src="image? image : require('../assets/user.jpg')" :alt="user.name"
@@ -68,6 +67,7 @@
                                     :data-name="icon.name" :class="icon.url? 'bg-success':'bg-warning'"
                                     @click="openSocialEdit($event)">
                                     <font-awesome-icon :icon="['fab', icon.prefix]" class="mx-3" />
+                                  
                                     <input type="text" class="d-none link-value" :value="icon.url">
                                 </span>
                                 <br>
@@ -136,15 +136,18 @@
         },
         data() {
             return {
-                user: JSON.parse(localStorage.getItem('user'))
+                user: this.dashboard ? JSON.parse(localStorage.getItem('user')) : {},
+                authorname: this.$route.params.name,
             }
         },
         props: {
-            dashboard: Boolean
+            dashboard: Boolean,
+            
         },
         computed: {
             social_icons() {
-                return JSON.parse(this.user.social)[0];
+                console.log(this.user.social);
+                return this.user.social ? JSON.parse(this.user.social)[0] : [];
             },
             name() {
                 return this.user.name ? this.user.name : '';
@@ -169,6 +172,12 @@
             }
         },
         methods: {
+            getUser () {
+                this.$store.dispatch('get_user', this.$route.params.name).then(user => {
+                    this.user = user;
+                    console.log(user);
+                }).catch(err => console.log(err));
+            },
             uploadOpen() {
                 $('#image-input').click();
             },
@@ -224,8 +233,6 @@
                 if (!$('.soc-edit:visible').length) {
                     $('.soc-edit').slideDown();
                 }
-
-
             },
             hideSocInput() {
                 $('.soc-edit').slideUp();
@@ -295,7 +302,10 @@
             }
         },
         mounted() {
-
+            if (!this.dashboard) {
+                this.getUser();
+            }
+            console.log(this.$store.state.user);
             if ($('#adminNav:visible').length) {
                 $('.admin')[0].click();
             }

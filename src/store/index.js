@@ -4,13 +4,18 @@ import Vue from 'vue';
 
 const api = require('../../api');
 const apiBase = `${api.protocol}://${api.host}${api.baseUrl}`;
-
+const completeAvatar = (id, file) => {
+    return `${apiBase}/users/avatar/${id}/${file}`;
+};
+const completePostPic = (id, file) => {
+    return  `${apiBase}/postimage/${id}/${file}`;
+};
 const proceed_login = (commit, resp, resolve, reject) => {
     if (!resp.data.error) {
         const token = resp.data.data.token;
         const user = resp.data.data.user;
         if (user.image) {
-            user.image = `${apiBase}/users/avatar/${user.id}/${user.image}`;
+            user.image = completeAvatar(user.id, user.image);
         }
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
@@ -59,11 +64,20 @@ const actions = {
                 }
             });
     },
+    get_user({commit}, name) {
+        console.log(commit, name);
+        return new Promise((resolve, reject) => {
+            axios.get(`${apiBase}/users/${name}`).then(resp => {
+                let user = resp.data.user;
+                user.image = completeAvatar(user.id, user.image);
+                resolve(resp.data.user);
+            }).catch(err => reject(err));
+        });
+    },
     update_user({
         commit
     }, user) {
         return new Promise((resolve, reject) => {
-
             axios({
                 url: `${apiBase}/users/${user.id}`,
                 //url: `http://localhost:3000/api/users/${user.id}`,
@@ -102,7 +116,6 @@ const actions = {
     rm_post({
         commit
     }, id) {
-        console.log(commit);
         return new Promise((resolve, reject) => {
             axios({
                //url: `http://localhost:3000/api/posts/${id}`,
@@ -159,7 +172,7 @@ const actions = {
                 method: 'GET'
             }).then(resp => {
                 commit('get_post');
-                resp.data.post.image = `${apiBase}/postimage/${resp.data.post.user_id}/${resp.data.post.image}`;
+                resp.data.post.image = completePostPic(resp.data.post.user_id, resp.data.post.image);
                 resolve(resp);
             }).catch(err => reject(err));
         });
@@ -315,14 +328,14 @@ const mutations = {
         };
         for (var i = 0; i < data.posts.length; i++) {
             data.posts[i].shortened = shortenText(data.posts[i].text);
-            data.posts[i].image = data.posts[i].image ? `${apiBase}/postimage/${data.posts[i].user_id}/${data.posts[i].image}` : '';
+            data.posts[i].image = completePostPic(data.posts[i].user_id, data.posts[i].image);
         }
         state.data = data;
     },
     get_post() {},
     new_post(state, post) {
         console.log(post);
-        post.image = `${apiBase}/postimage/${post.user_id}/${post.image}`;
+        post.image = completePostPic(post.user_id,post.image);
         state.data.posts.push(post);
     },
     rm_post(state, id) {
@@ -345,8 +358,8 @@ const mutations = {
     },
     new_avatar(state, path) {
         let user = JSON.parse(localStorage.user);
-        state.user.image = user.image = `${apiBase}/users/avatar/${user.id}/${path}`;
-        localStorage.user = JSON.stringify(user);
+        state.user.image = completeAvatar(user.id, path);
+        localStorage.setItem('user', JSON.stringify(state.user));
     },
     auth_request(state) {
         state.authStatus = 'loading';
