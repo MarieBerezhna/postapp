@@ -17,6 +17,7 @@ const proceed_login = (commit, resp, resolve, reject) => {
         if (user.image) {
             user.image = completeAvatar(user.id, user.image);
         }
+        console.log(user);
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
         axios.defaults.headers.common.Authorization = token;
@@ -73,7 +74,7 @@ const actions = {
             axios.get(`${apiBase}/users/${name}`).then(resp => {
                 let user = resp.data.user;
                 user.image = completeAvatar(user.id, user.image);
-                resolve(resp.data.user);
+                resolve(user);
             }).catch(err => reject(err));
         });
     },
@@ -89,6 +90,7 @@ const actions = {
                 method: 'PATCH'
             }).then(resp => {
                 const user = resp.data.user;
+
                 commit('update_user', user);
                 localStorage.setItem('user', JSON.stringify(user));
                 resolve(resp);
@@ -355,7 +357,6 @@ const mutations = {
     new_comment(state, comment) {
         //add to user dashboard
         state.data.comments.push(comment);
-        console.log(state.data, comment);
     },
     update_user(state, user) {
        

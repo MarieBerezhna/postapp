@@ -153,7 +153,8 @@
         },
         computed: {
             social_icons() {
-                return this.user.social ? JSON.parse(this.user.social)[0] : [];
+               
+                return this.user.social ? JSON.parse(this.user.social)[0] : []
             },
             posts() {
                 let posts = this.$store.state.data.posts;
@@ -168,7 +169,7 @@
             getUser() {
                 this.$store.dispatch('get_user', this.$route.params.name).then(user => {
                     this.user = user;
-                    console.log(user);
+                    console.log(JSON.parse(this.user.social)[0])
                 }).catch(err => console.log(err));
             },
             uploadOpen() {
@@ -212,6 +213,7 @@
                 if (this.dashboard) e.preventDefault();
                 let span = $(e.target).closest('.link')[0];
                 let val = $(span).attr('data-value');
+                console.log(val)
                 let name = $(span).attr('data-name');
                 $('.soc-edit').find('input').val('');
                 // if assigned show the link, if not set placeholder:
@@ -235,11 +237,11 @@
                 let input = e.target.tagName == 'path' ?
                     $(e.target).parent().parent().find('input') :
                     $(e.target).parent().find('input');
-
+  console.log(e.target, input);
                 let val = $(input).val();
-                console.log(val);
+                console.log(val)
                 let span = $('.link[beingEdited]')[0];
-                console.log(span);
+              
                 $(span).attr('data-value', val ? val : '')
                     .removeClass(val ? 'bg-warning' : 'bg-success')
                     .addClass(val ? 'bg-success' : 'bg-warning');
@@ -250,9 +252,8 @@
                  $(input).val('');
             },
             updateUser: function () {
-
-                let social = {}
-                social["0"] = [];
+                if (this.dashboard) {
+                let social = {"0":[]};
                 $('.link').each((el) => {
                     let item = $('.link')[el];
                     let data = {
@@ -260,10 +261,9 @@
                         "prefix": $(item).attr('data-prefix'),
                         "url": $(item).attr('data-value')
                     }
-
-                    if (data) social[0][el] = data;
+                    social[0][el] = data;
+                    console.log(data);
                 })
-                
                 const user = {
                     id: this.user.id,
                     name: $('#username').val().trim(),
@@ -274,6 +274,8 @@
                 };
                 this.$store.dispatch('update_user', user)
                     .catch(err => console.log(err))
+                }
+
             },
             imgHover(e) {
                 $(e.target).next('.img-hover').css({
