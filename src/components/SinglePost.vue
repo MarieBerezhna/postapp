@@ -1,5 +1,5 @@
 <template>
-    <div class="post-inner bg-light radius">
+    <div class="post-inner bg-light radius pb-3">
         <a :href="`/post${post.id}`">
             <h3 class="p-3 mb-0 bg-warning text-bold post-heading text-center">{{post.heading}}</h3>
         </a>
@@ -10,15 +10,17 @@
                     </a>
                     <div class="meta px-3 border-bottom row">
                         <a :href="'/user/' + post.user_name" class="col-4">
-                        <img v-if="location.href.indexOf('dashboard') === -1" class="user-img rounded-circle"
+                        <img v-if="location.href.indexOf('dashboard') === -1" 
+                        class="user-img rounded-circle"
                             :src="post.user_image" :alt="'author: ' + post.user_name">
-                        <span class="col-4 offset-4 text-dark">{{post.user_name}}</span>
+                        <span v-if="location.href.indexOf('dashboard') === -1" 
+                        class="col-4 offset-5 text-dark">{{post.user_name}}</span>
                         </a>
-                        <span class="col-3 text-danger post-category" :data-id="post.cat">
+                        <span class="col-4 text-danger post-category" :data-id="post.cat">
                             {{ getCat(post.cat) }}
                         </span>
-                        <span class="col-3"> {{ datetime(post.datetime) }}</span>
-                        <div class="col-12">
+                        <span class="col-4"> {{ datetime(post.datetime) }}</span>
+                        <div class="col-12 pt-3">
                             <span v-for="tag in parseTags(post.tags)" :key="tag.index" class="text-success">
                                 #{{ tag }}
                             </span>
@@ -80,6 +82,7 @@
 
 <style lang="scss" scoped>
     .user-img {
+        left: 0;
         margin-top: -15px
     }
 </style>

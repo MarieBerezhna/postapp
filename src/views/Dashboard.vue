@@ -19,7 +19,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="user-meta position-relative w-75 mx-auto">
+                    <div v-if="dashboard" class="user-meta position-relative w-75 mx-auto">
                         <textarea name="" cols="5" rows="3"
                             class="hidden w-75 mx-auto border rounded md-textarea form-control"></textarea>
                         <span id="user-bio" class="w-75 mx-auto">
@@ -31,6 +31,9 @@
                         <font-awesome-icon v-if="dashboard" :icon="['fas', 'edit']" @click="toggleBio($event)"
                             class="position-absolute  edit-btn mt-1 mx-1" style="right:0;" />
                     </div>
+                        <div v-else>
+                            <h1>{{ this.user.name }}</h1>
+                        </div>
                 </div>
                 <div class="col-12 col-md-6">
                     <div v-if="this.user && !this.user.verified && dashboard"
@@ -62,19 +65,22 @@
                             <font-awesome-icon v-if="dashboard" :icon="['fas', 'edit']" @click="enableInput($event)"
                                 class="edit-btn mt-1 mx-1 position-absolute" style="right: 0" />
                         </div>
-                        <div v-else>
-                            <h1>{{ this.user.name }}</h1>
+                                                <div v-else>
+                            <h1>{{ this.user.bio }}</h1>
                         </div>
                         <div class="form-group p-3 position-relative">
                             <div class="social-links mx-auto text-center ">
-                                <a class="link py-2 mx-2 border rounded text-dark" 
+                                <a class="link d-inline-block mx-2  rounded-circle" 
+                               
+                                style="width: 50px;height:50px; padding-top: 14px"
                                 v-for="icon in social_icons"
                                     :key="icon.name" :data-prefix="icon.prefix" :data-value="icon.url"
                                     :href="icon.url" target="_blank"
-                                    :data-name="icon.name" :class="icon.url? 'bg-success':'bg-warning'"
+                                    :data-name="icon.name" 
+                                    :class="icon.url? 'bg-success text-white border':(dashboard ? 'bg-warning text-dark border' : 'd-none')"
                                     @click="dashboard ? openSocialEdit($event) : null">
-                                    <font-awesome-icon :icon="['fab', icon.prefix]" class="mx-3" />
-
+                                    <font-awesome-icon v-if="icon.url && !dashboard" :icon="['fab', icon.prefix]" class="mx-3"  />
+                                    <font-awesome-icon v-else-if="dashboard" :icon="['fab', icon.prefix]" class="mx-3"  />
                                     <input v-if="dashboard" type="text" class="d-none link-value" :value="icon.url">
                                 </a>
                                 <br>
@@ -121,8 +127,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
         <change-pass />
@@ -176,7 +180,7 @@
             getUser() {
                 this.$store.dispatch('get_user', this.$route.params.name).then(user => {
                     this.user = user;
-                    console.log(JSON.parse(this.user.social)[0])
+                    console.log(this.user)
                 }).catch(err => console.log(err));
             },
             uploadOpen() {
