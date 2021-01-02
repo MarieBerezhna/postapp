@@ -84,15 +84,18 @@ const actions = {
         console.log(user.social);
         return new Promise((resolve, reject) => {
             axios({
-                url: `${apiBase}/users/${user.id}`,
-                //url: `http://localhost:3000/api/users/${user.id}`,
+                //url: `${apiBase}/users/${user.id}`,
+                url: `http://localhost:3000/api/users/${user.id}`,
                 data: user,
                 method: 'PATCH'
             }).then(resp => {
-                const user = resp.data.user;
 
-                commit('update_user', user);
-                localStorage.setItem('user', JSON.stringify(user));
+                if (resp.data.user) {
+                    const user = resp.data.user;
+                    commit('update_user', user);
+                    localStorage.setItem('user', JSON.stringify(user));
+                }
+
                 resolve(resp);
             }).catch(err => {
                 reject(err);

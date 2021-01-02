@@ -39,8 +39,9 @@
                         If you didn't get a link via e-mail, please check the spam folder or<br>
                         <a class="link">request verification again</a>
                     </div>
+                    <span class="text-danger"> {{ this.error }}</span>
                     <div class="user-meta text-left mt-md-3 text-center">
-                        <div class="form-group position-relative">
+                        <div v-if="dashboard" class="form-group position-relative">
                             <label for="username"></label>
                             <input type="text" id="username" class="w-75 w-md-100" :value="this.user.name" disabled>
 
@@ -51,7 +52,7 @@
                                 class="edit-btn mt-1 mx-1 position-absolute" style="right: 0" />
                             <span class="bio-btn-text"></span>
                         </div>
-                        <div class="form-group position-relative">
+                        <div v-if="dashboard" class="form-group position-relative">
                             <label for="email"></label>
                             <input type="text" id="email" class="w-75 w-md-100" :value="user.email"
                                 :placeholder="user.email" disabled required>
@@ -61,7 +62,9 @@
                             <font-awesome-icon v-if="dashboard" :icon="['fas', 'edit']" @click="enableInput($event)"
                                 class="edit-btn mt-1 mx-1 position-absolute" style="right: 0" />
                         </div>
-
+                        <div v-else>
+                            <h1>{{ this.user.name }}</h1>
+                        </div>
                         <div class="form-group p-3 position-relative">
                             <div class="social-links mx-auto text-center ">
                                 <a class="link py-2 mx-2 border rounded text-dark" 
@@ -145,11 +148,12 @@
             return {
                 user: this.dashboard ? JSON.parse(localStorage.getItem('user')) : {},
                 authorname: this.$route.params.name,
+                error: ''
             }
         },
         props: {
             dashboard: Boolean,
-
+         
         },
         computed: {
             social_icons() {
@@ -163,6 +167,9 @@
             comments() {
                 let comments = this.$store.state.data.comments;
                 return comments ? comments.filter(row => row.user_id === this.user.id).slice(0, 6).reverse() : [];
+            },
+            err () {
+                return this.error;
             }
         },
         methods: {
@@ -237,9 +244,7 @@
                 let input = e.target.tagName == 'path' ?
                     $(e.target).parent().parent().find('input') :
                     $(e.target).parent().find('input');
-  console.log(e.target, input);
                 let val = $(input).val();
-                console.log(val)
                 let span = $('.link[beingEdited]')[0];
               
                 $(span).attr('data-value', val ? val : '')
@@ -262,7 +267,6 @@
                         "url": $(item).attr('data-value')
                     }
                     social[0][el] = data;
-                    console.log(data);
                 })
                 const user = {
                     id: this.user.id,
@@ -272,8 +276,12 @@
                     social: JSON.stringify(social),
                     bio: $('#user-bio').text().trim()
                 };
-                this.$store.dispatch('update_user', user)
-                    .catch(err => console.log(err))
+                this.$store.dispatch('update_user', user).then(resp => {
+                    console.log(resp);
+                    if (resp.data.error) {
+                        this.error = resp.data.message;
+                    }
+                }).catch(err => console.log(err))
                 }
 
             },
