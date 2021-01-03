@@ -121,6 +121,13 @@ const actions = {
         });
 
     },
+    add_cat: async ({ commit },cat) => {
+
+        let result = await axios.post(`http://localhost:3000/api/categories/`, {name:cat});
+        // to do : error handle
+        commit('add_cat', result.data.data[0]);
+        return result.data.data[0];
+    },
     rm_post({
         commit
     }, id) {
@@ -348,6 +355,10 @@ const mutations = {
         console.log(post);
         post.image = completePostPic(post.user_id,post.image);
         state.data.posts.push(post);
+    },
+    add_cat(state, cat) {
+        state.data.cats.push(cat);
+        console.log(cat);
     },
     rm_post(state, id) {
         let index = state.data.posts.map((item) => item.id).indexOf(id);

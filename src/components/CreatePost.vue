@@ -32,7 +32,14 @@
               </div>
               <div class="form-group">
                   <CatFilter :label="'Category'" :parentSelector="'#createModal'"/>
-
+                  Didn't find the right category?
+                  <div class="row">
+                  <input type="text" class="col-6 radius border px-3" placeholder="Type in new category name">
+                  <button @click.prevent="addCat($event)"
+                  class="col-5 offset-1 btn btn-warning">Add category</button>
+                  </div>
+                  
+                 
                 <label for="tags"></label>
                 <textarea name="tags" id="tags" class="w-100 rounded my-2" placeholder="Add tags separated by spaces. 
 You ca also use #tags inside a post text.">
@@ -76,6 +83,21 @@ You ca also use #tags inside a post text.">
       },
     },
     methods: {
+      openCatInput () {
+
+      },
+      async addCat(e) {
+        let val = $(e.target).prev('input').val();
+        if (val.length) {
+          let duplicates = this.$store.state.data.cats.filter(cat => cat.name === val);
+          if (!duplicates.length) {
+            let newCat = await this.$store.dispatch('add_cat', val);
+            console.log(newCat);
+          } else {
+            // handle duplicate (autoselect)
+          }
+        }
+      },
       createPost() {
         let post = {
           heading: this.heading,
