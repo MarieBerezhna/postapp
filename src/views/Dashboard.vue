@@ -105,7 +105,7 @@
                     <h2 class="border-bottom text-center">{{ dashboard ? 'Your': this.user.name + "'s" }} latest posts:
                     </h2>
                     <div class="posts p-2">
-                        <p v-if="!posts">
+                        <p v-if="!posts.length">
                             {{ dashboard ? 'You don\'t': this.user.name + "doesn't"}} have any posts yet :(
                         </p>
                         <div v-else>

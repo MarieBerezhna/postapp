@@ -46,6 +46,7 @@ export default {
 
 <style lang="scss">
 $yellow: #F2BD00;
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -78,6 +79,10 @@ a {
 }
 textarea {
   resize: none !important;
+}
+
+input:focus, button:focus {
+    outline: none !important;
 }
 //colors:
 

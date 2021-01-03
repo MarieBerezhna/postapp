@@ -9,7 +9,6 @@
             <div class="collapse navbar-collapse position-absolute" id="navbarNav">
                 
                 <ul class="navbar-nav bg-light">
-                    <!-- <span>X</span> -->
                     <li class="nav-item active" @click="filterCats($event)">
                         <a class="nav-link" href="#" data-category=0>All</a>
                     </li>

@@ -1,7 +1,9 @@
 <template>
   <div id="main" class="py-5 container ">
-    <CatFilter :categories="categories" />
     <div class="row">
+      <div class="col-12 col-md-5 order-md-1">
+        <FilterBody :categories="categories"/>
+      </div>
       <div class="col-12 col-md-7">
         <div v-for='post in posts' :key='post.id' class="border my-4 post" :data-category="post.cat"
           :data-id="post.id">
@@ -15,13 +17,13 @@
 </template>
 
 <script>
-  import CatFilter from '../components/CatFilter.vue';
-  import SinglePost from '../components/SinglePost.vue'
+  import SinglePost from '../components/SinglePost.vue';
+  import FilterBody from '../components/filters/FilterBody.vue';
   export default {
     name: 'HelloWorld',
     components: {
-      CatFilter,
       SinglePost,
+      FilterBody
     },
     computed: {
       posts() {
