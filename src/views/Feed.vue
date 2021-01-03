@@ -2,7 +2,7 @@
   <div id="main" class="py-5 container ">
     <div class="row">
       <div class="col-12 col-md-5 order-md-1">
-        <FilterBody :categories="categories"/>
+        <FilterBody/>
       </div>
       <div class="col-12 col-md-7">
         <div v-for='post in posts' :key='post.id' class="border my-4 post" :data-category="post.cat"
@@ -30,9 +30,7 @@
         let posts = this.$store.state.data.posts;
         return posts ? posts.reverse() : [];
       },
-      categories() {
-        return this.$store.state.data.cats;
-      }
+
     }
   }
 </script>

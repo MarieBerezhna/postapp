@@ -81,7 +81,6 @@ const actions = {
     update_user({
         commit
     }, user) {
-        console.log(user.social);
         return new Promise((resolve, reject) => {
             axios({
                 //url: `${apiBase}/users/${user.id}`,
