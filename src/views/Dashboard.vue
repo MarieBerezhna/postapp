@@ -165,8 +165,9 @@
                 return this.user.social ? JSON.parse(this.user.social)[0] : []
             },
             posts() {
-                let posts = this.$store.state.data.posts;
-                return posts ? posts.filter(post => post.user_id === this.user.id).slice(0, 6).reverse() : [];
+                // let posts = this.$store.state.data.posts;
+                // return posts ? posts.filter(post => post.user_id === this.user.id).slice(0, 6).reverse() : [];
+                return this.user.posts ? this.user.posts : [];
             },
             comments() {
                 let comments = this.$store.state.data.comments;

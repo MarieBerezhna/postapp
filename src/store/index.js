@@ -189,7 +189,7 @@ const actions = {
             }).then(resp => {
                 commit('get_post');
                 resp.data.post.image = completePostPic(resp.data.post.user_id, resp.data.post.image);
-               // resp.data.post.user_image = completeAvatar(resp.data.post.user_id, resp.data.post.user_image);
+                resp.data.post.user_img = completeAvatar(resp.data.post.user_id, resp.data.post.user_img);
                 resolve(resp);
             }).catch(err => reject(err));
         });
