@@ -15,7 +15,7 @@
                     </a>
                     
                     <div class="meta px-3 border-bottom row">
-                        <img class="user-img rounded-circle" :src="post.user_img" 
+                        <img class="user-img rounded-circle" :src="post.user_image" 
                         :alt="'author: ' + post.user_name" style="margin-top: -25px">
                         <span class="col-4 offset-2">{{post.user_name}}</span>
                         <span class="text-danger post-category" :data-id="post.cat">

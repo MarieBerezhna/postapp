@@ -74,7 +74,11 @@ const actions = {
         return new Promise((resolve, reject) => {
             axios.get(`${apiBase}/users/${name}`).then(resp => {
                 let user = resp.data.user;
+                console.log(user);
                 user.image = completeAvatar(user.id, user.image);
+                user.posts.forEach(post => {
+                    post.user_image = user.image;
+                });
                 resolve(user);
             }).catch(err => reject(err));
         });
@@ -189,7 +193,7 @@ const actions = {
             }).then(resp => {
                 commit('get_post');
                 resp.data.post.image = completePostPic(resp.data.post.user_id, resp.data.post.image);
-                resp.data.post.user_img = completeAvatar(resp.data.post.user_id, resp.data.post.user_img);
+                resp.data.post.user_image = completeAvatar(resp.data.post.user_id, resp.data.post.user_img);
                 resolve(resp);
             }).catch(err => reject(err));
         });

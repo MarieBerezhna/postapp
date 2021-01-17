@@ -179,9 +179,9 @@
         },
         methods: {
             getUser() {
-                this.$store.dispatch('get_user', this.$route.params.name).then(user => {
+                this.$store.dispatch('get_user', this.dashboard ? this.user.name : this.$route.params.name).then(user => {
                     this.user = user;
-                    console.log(this.user)
+                    console.log(this.user.posts)
                 }).catch(err => console.log(err));
             },
             uploadOpen() {
@@ -315,9 +315,9 @@
             }
         },
         mounted() {
-            if (!this.dashboard) {
+            // if (!this.dashboard) {
                 this.getUser();
-            }
+            // }
             if ($('#adminNav:visible').length) {
                 $('.admin')[0].click();
             }
