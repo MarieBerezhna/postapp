@@ -78,6 +78,7 @@ const actions = {
                 user.image = completeAvatar(user.id, user.image);
                 user.posts.forEach(post => {
                     post.user_image = user.image;
+                    post.image = completePostPic(user.id, post.image);
                 });
                 resolve(user);
             }).catch(err => reject(err));
@@ -341,35 +342,25 @@ const actions = {
 //to handle mutations
 const mutations = {
     SET_DATA(state, data) {
-        let shortenText = function (value) {
-            let dots = value.length < 300 ? '' : '...';
-            let index = 300;
-            let visible = value.slice(0, index) + dots;
-            return visible;
-        };
         for (var i = 0; i < data.posts.length; i++) {
             let post = data.posts[i];
-            post.shortened = shortenText(post.text);
             post.image = completePostPic(post.user_id, post.image);
             post.user_image = completeAvatar(post.user_id, post.user_image);
         }
         state.data = data;
     },
-    get_post() {},
+    // get_post() {},
     new_post(state, post) {
-        console.log(post);
         post.image = completePostPic(post.user_id,post.image);
         state.data.posts.push(post);
     },
     add_cat(state, cat) {
         state.data.cats.push(cat);
-        console.log(cat);
     },
     rm_post(state, id) {
         let index = state.data.posts.map((item) => item.id).indexOf(id);
         if (index > -1) {
             state.data.posts.splice(index, 1);
-            console.log("Result", state.data.posts);
         }
     },
     new_comment(state, comment) {

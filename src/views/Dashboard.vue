@@ -165,8 +165,6 @@
                 return this.user.social ? JSON.parse(this.user.social)[0] : []
             },
             posts() {
-                // let posts = this.$store.state.data.posts;
-                // return posts ? posts.filter(post => post.user_id === this.user.id).slice(0, 6).reverse() : [];
                 return this.user.posts ? this.user.posts : [];
             },
             comments() {
@@ -181,7 +179,6 @@
             getUser() {
                 this.$store.dispatch('get_user', this.dashboard ? this.user.name : this.$route.params.name).then(user => {
                     this.user = user;
-                    console.log(this.user.posts)
                 }).catch(err => console.log(err));
             },
             uploadOpen() {

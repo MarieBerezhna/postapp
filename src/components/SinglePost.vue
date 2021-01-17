@@ -27,14 +27,9 @@
                         </div>
                     </div>
                 </div>
-                <div v-html="post.shortened" class="col-12 p-3 post-text text-justify">
+                <div v-html="post.text" class="col-12 p-3 post-text text-justify">
                 </div>
             </div>
-
-        <div class="row" v-if="post.text.length >= 300">
-            <div @click="toggleText($event, post.id)" class="show btn btn-success mx-auto my-3 col-10 col-md-4">Read
-                more</div>
-        </div>
         <span class="pl-3">{{ post.views ? post.views : 0 }} views</span>
     </div>
 
@@ -42,7 +37,6 @@
 
 <script>
     import formatDateTime from '../utils/formatDateTime';
-    import $ from 'jquery';
     import getCat from '../utils/getCatName';
     export default {
         props: {
@@ -62,19 +56,6 @@
             },
             datetime: function (datetime) {
                 return formatDateTime(datetime)
-            },
-            toggleText: function (e, id) {
-                let postDiv = $(`.post[data-id="${id}"]`).find('.post-text');
-                if ($(e.target).hasClass('show')) {
-                    $(postDiv).html(this.post.text);
-                    $(e.target).removeClass('show')
-                        .addClass('hide').text('Show less');
-
-                } else {
-                    $(e.target).removeClass('hide')
-                        .addClass('show').text('Read more');
-                    $(postDiv).html(this.post.shortened);
-                }
             }
         }
     }
