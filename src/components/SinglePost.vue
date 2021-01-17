@@ -1,7 +1,7 @@
 <template>
     <div class="post-inner bg-light radius pb-3">
         <a :href="`/post${post.id}`">
-            <h3 class="p-3 mb-0 bg-warning text-bold post-heading text-center">{{post.heading}}</h3>
+            <h3 class="p-3  my-0 bg-warning text-bold post-heading text-center">{{post.heading}}</h3>
         </a>
             <div class="row">
                 <div class="col-12 p-0">
