@@ -168,8 +168,9 @@
                 return this.user.posts ? this.user.posts : [];
             },
             comments() {
-                let comments = this.$store.state.data.comments;
-                return comments ? comments.filter(row => row.user_id === this.user.id).slice(0, 6).reverse() : [];
+                return this.user.posts ? this.user.posts : [];
+               // let comments = this.$store.state.data.comments;
+               // return comments ? comments.filter(row => row.user_id === this.user.id).slice(0, 6).reverse() : [];
             },
             err () {
                 return this.error;
