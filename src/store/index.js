@@ -3,7 +3,8 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 
 const api = require('../../api');
-const apiBase = `${api.protocol}://${api.host}${api.baseUrl}`;
+let apiBase = `${api.protocol}://${api.host}${api.baseUrl}`;
+//apiBase = 'http://localhost:3000/api';
 const completeAvatar = (id, file) => {
     return (file && file.length)? `${apiBase}/users/avatar/${id}/${file}` : null;
 };
@@ -379,7 +380,7 @@ const mutations = {
         state.user = localuser;
     },
     new_avatar(state, path) {
-        state.user.image = path;
+        state.user.image = completeAvatar(state.user.id, path);
         localStorage.setItem('user', JSON.stringify(state.user));
     },
     auth_request(state) {
