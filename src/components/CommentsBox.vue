@@ -10,7 +10,7 @@
                     {{ comment.text }}
                     <div class="position-absolute buttons w-100 ml-3" v-if="user" :data-id="comment.id">
                         <span class=" btn bg-secondary text-white border py-0 mx-1">Reply</span>
-                        <span @click="rmComment($event)"
+                        <span v-if="current_user.id === comment.user_id" @click="rmComment($event)"
                             class=" btn bg-secondary text-white border py-0 mx-1">Delete</span>
 
                     </div>
@@ -51,9 +51,11 @@
                 }
 
             },
+            current_user() {
+                return JSON.parse(localStorage.user);
+            },
             rmComment(e) {
-                let id = e.target.parentNode.getAttribute('data-id')
-                console.log(id)
+                let id = e.target.parentNode.getAttribute('data-id');
                 this.$store.dispatch("rm_comment", id).then(resp => {
                 if (resp.status === 200) {
                     document.querySelector(`.comment-box[data-id='${id}']`).remove();
@@ -71,8 +73,8 @@
         .user-img {
         position: absolute;
         z-index: 100;
-        height: 50px !important;
-        width: 50px;
+        height: 40px !important;
+        width: 40px;
         margin-top: -15px;
     }
         .buttons {
