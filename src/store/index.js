@@ -129,7 +129,7 @@ const actions = {
     },
     add_cat: async ({ commit },cat) => {
 
-        let result = await axios.post(`http://localhost:3000/api/categories/`, {name:cat});
+        let result = await axios.post(`${apiBase}/categories/`, {name:cat});
         // to do : error handle
         commit('add_cat', result.data.data[0]);
         return result.data.data[0];
@@ -188,13 +188,16 @@ const actions = {
     }, id) {
         return new Promise((resolve, reject) => {
             axios({
-                url: `${apiBase}/posts/${id}`,
-                // url: `http://localhost:3000/api/posts/${id}`,
+                //url: `${apiBase}/posts/${id}`,
+                url: `http://localhost:3000/api/posts/${id}`,
                 method: 'GET'
             }).then(resp => {
                 commit('get_post');
                 resp.data.post.image = completePostPic(resp.data.post.user_id, resp.data.post.image);
                 resp.data.post.user_image = completeAvatar(resp.data.post.user_id, resp.data.post.user_img);
+                if (resp.data.post.comments.length) {
+                    resp.data.post.comments.forEach(c => c.user_img = completeAvatar(c.user_id, c.user_img));
+                }
                 resolve(resp);
             }).catch(err => reject(err));
         });
@@ -349,7 +352,7 @@ const mutations = {
         }
         state.data = data;
     },
-    // get_post() {},
+    get_post() {},
     new_post(state, post) {
         post.image = completePostPic(post.user_id,post.image);
         state.data.posts.push(post);
