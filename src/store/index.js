@@ -74,7 +74,6 @@ const actions = {
         return new Promise((resolve, reject) => {
             axios.get(`${apiBase}/users/${name}`).then(resp => {
                 let user = resp.data.user;
-                console.log(user);
                 user.image = completeAvatar(user.id, user.image);
                 user.posts.forEach(post => {
                     post.user_image = user.image;
@@ -89,8 +88,8 @@ const actions = {
     }, user) {
         return new Promise((resolve, reject) => {
             axios({
-                //url: `${apiBase}/users/${user.id}`,
-                url: `http://localhost:3000/api/users/${user.id}`,
+                url: `${apiBase}/users/${user.id}`,
+                //url: `http://localhost:3000/api/users/${user.id}`,
                 data: user,
                 method: 'PATCH'
             }).then(resp => {
@@ -139,7 +138,6 @@ const actions = {
     }, id) {
         return new Promise((resolve, reject) => {
             axios({
-               //url: `http://localhost:3000/api/posts/${id}`,
                url: `${apiBase}/posts/${id}`,
                 method: 'DELETE'
             }).then((resp) => {
@@ -156,7 +154,7 @@ const actions = {
         console.log(commit, data);
         return new Promise((resolve, reject) => {
             axios({
-                // url: `http://localhost:3000/api/comment`,
+                //url: `http://localhost:3000/api/comment`,
                 url: `${apiBase}/comment`,
                 data,
                 method: 'POST'
@@ -178,7 +176,6 @@ const actions = {
                 //url: `http://localhost:3000/api/comment/${id}`,
                 method: 'DELETE'
             }).then(resp => {
-                console.log(resp);
                 resolve(resp);
             }).catch(err => reject(err));
         });
@@ -219,7 +216,6 @@ const actions = {
                     commit('new_avatar', file.name);
                     resolve(resp);
                 }).catch(err => {
-                    console.log(err);
                     reject(err);
                 });
         });

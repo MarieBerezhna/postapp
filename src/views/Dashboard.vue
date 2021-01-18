@@ -178,6 +178,7 @@
             getUser() {
                 this.$store.dispatch('get_user', this.dashboard ? this.user.name : this.$route.params.name).then(user => {
                     this.user = user;
+                    console.log(user);
                 }).catch(err => console.log(err));
             },
             uploadOpen() {

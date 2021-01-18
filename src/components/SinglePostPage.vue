@@ -2,7 +2,7 @@
     <div class="container">
         <div class="post border bg-light" :data-id="post.id">
             <h3 class="p-3 my-0 bg-warning text-bold post-heading">{{post.heading}}
-                <img v-if="this.user !== null && post.user_id === this.user.id"
+                <img v-if="this.user !== null && parseInt(post.user_id) === this.user.id"
                 class="rm-post" @click="rmPost($event)" 
                 :src="require('../assets/cancel.png')" alt="delete"
                     title="delete">
