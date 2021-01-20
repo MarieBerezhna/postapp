@@ -65,7 +65,6 @@ const actions = {
                 if (response) {
                     let data = response.data.data;
                     data.comments.forEach(c => c.user_img = completeAvatar(c.user_id, c.user_img));
-                    console.log(data);
                     commit('SET_DATA', data);
                 } else {
                     console.log('Server fault');
@@ -192,8 +191,7 @@ const actions = {
     }, id) {
         return new Promise((resolve, reject) => {
             axios({
-                //url: `${apiBase}/posts/${id}`,
-                url: `http://localhost:3000/api/posts/${id}`,
+                url: `${apiBase}/posts/${id}`,
                 method: 'GET'
             }).then(resp => {
                 commit('get_post');

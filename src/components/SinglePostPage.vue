@@ -85,7 +85,6 @@
             },
             rmPost(e) {
                 let post_id = e.target.parentNode.parentNode.getAttribute('data-id')
-                console.log(post_id);
                 this.$store.dispatch('rm_post', post_id);
                 location = '/';
             },
