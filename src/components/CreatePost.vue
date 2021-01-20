@@ -18,6 +18,10 @@
           <div class="modal-body">
             <form action="" method="POST" enctype="multipart/form-data">
               <div class="form-group">
+                  <CatFilter :addCatOpt="true" :label="'Category'" :parentSelector="'#createModal'"/>
+              </div>
+
+              <div class="form-group">
                 <label for=""></label>
                 <input type="text" v-model="heading" placeholder="Heading (optional)" class="form-control">
               </div>
@@ -31,13 +35,7 @@
                 <input type="file" id="post-img" name="img" accept="image/*">
               </div>
               <div class="form-group">
-                  <CatFilter :label="'Category'" :parentSelector="'#createModal'"/>
-                  Didn't find the right category?
-                  <div class="row">
-                  <input type="text" class="col-6 radius border px-3" placeholder="Type in new category name">
-                  <button @click.prevent="addCat($event)"
-                  class="col-5 offset-1 btn btn-warning">Add category</button>
-                  </div>
+
                   
                  
                 <label for="tags"></label>
@@ -86,18 +84,18 @@ You ca also use #tags inside a post text.">
       openCatInput () {
 
       },
-      async addCat(e) {
-        let val = $(e.target).prev('input').val();
-        if (val.length) {
-          let duplicates = this.$store.state.data.cats.filter(cat => cat.name === val);
-          if (!duplicates.length) {
-            let newCat = await this.$store.dispatch('add_cat', val);
-            console.log(newCat);
-          } else {
-            // handle duplicate (autoselect)
-          }
-        }
-      },
+      // async addCat(e) {
+      //   let val = $(e.target).prev('input').val();
+      //   if (val.length) {
+      //     let duplicates = this.$store.state.data.cats.filter(cat => cat.name === val);
+      //     if (!duplicates.length) {
+      //       let newCat = await this.$store.dispatch('add_cat', val);
+      //       console.log(newCat);
+      //     } else {
+      //       // handle duplicate (autoselect)
+      //     }
+      //   }
+      // },
       createPost() {
         let post = {
           heading: this.heading,
