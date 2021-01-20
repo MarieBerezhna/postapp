@@ -63,7 +63,10 @@ const actions = {
             .then(response => {
 
                 if (response) {
-                    commit('SET_DATA', response.data.data);
+                    let data = response.data.data;
+                    data.comments.forEach(c => c.user_img = completeAvatar(c.user_id, c.user_img));
+                    console.log(data);
+                    commit('SET_DATA', data);
                 } else {
                     console.log('Server fault');
                 }
@@ -79,6 +82,10 @@ const actions = {
                     post.user_image = user.image;
                     post.image = completePostPic(user.id, post.image);
                 });
+                user.comments.forEach(c => {
+                    c.user_img = user.image;
+                });
+                console.log(user.comments);
                 resolve(user);
             }).catch(err => reject(err));
         });

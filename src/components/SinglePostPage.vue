@@ -2,10 +2,8 @@
     <div class="container">
         <div class="post border bg-light" :data-id="post.id">
             <h3 class="p-3 my-0 bg-warning text-bold post-heading">{{post.heading}}
-                <img v-if="this.user !== null && parseInt(post.user_id) === this.user.id"
-                class="rm-post" @click="rmPost($event)" 
-                :src="require('../assets/cancel.png')" alt="delete"
-                    title="delete">
+                <img v-if="this.user !== null && parseInt(post.user_id) === this.user.id" class="rm-post"
+                    @click="rmPost($event)" :src="require('../assets/cancel.png')" alt="delete" title="delete">
             </h3>
 
             <div class="row">
@@ -13,33 +11,36 @@
                     <a href="">
                         <img v-if="post.image" :src="post.image" :alt="post.tags" width="100%" class="rounded">
                     </a>
-                    
+
                     <div class="meta px-3 border-bottom row">
-                        <img class="user-img rounded-circle" :src="post.user_image" 
-                        :alt="'author: ' + post.user_name" style="margin-top: -25px">
-                        <span class="col-4 offset-2">{{post.user_name}}</span>
+                        <a :href="'/user/' + post.user_name" class="col-4">
+                            <img  class="user-img rounded-circle"
+                                :src="post.user_image" :alt="'author: ' + post.user_name">
+                            <span 
+                                class="col-4 offset-5 text-dark">{{post.user_name}}</span>
+                        </a>
                         <span class="text-danger post-category" :data-id="post.cat">
                             {{ post.cat }}
                         </span>
 
                         <span class="col-3"> {{ datetime(post.datetime) }}</span>
-                    <div class="col-12">
-                        <span v-for="tag in parseTags(post.tags)" :key="tag.index" class="text-success">
-                            #{{ tag }}
-                        </span>
-                    </div>
+                        <div class="col-12">
+                            <span v-for="tag in parseTags(post.tags)" :key="tag.index" class="text-success">
+                                #{{ tag }}
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div v-html="post.text" class="col-12  p-3 post-text text-justify">
                 </div>
             </div>
-                   <span class="pl-3">{{ post.views ? post.views + 1 : 0 }} views</span>
+            <span class="pl-3">{{ post.views ? post.views + 1 : 0 }} views</span>
             <div class="row comments p-3 border-top">
 
                 <div class="col-12">
                     <CommentsBox :comments="comments" :user="user" />
                 </div>
-                <div v-if="user && user.verified"  class="col-12 comment-form">
+                <div v-if="user && user.verified" class="col-12 comment-form">
                     <form action="">
                         <div class="row position-relative my-1">
                             <img :src="user.image" alt="" class="d-block user-img p-0 col-2 col-md-1 rounded-circle">
@@ -122,7 +123,6 @@
             await this.$store.dispatch("get_post", this.id).then(resp => {
                 this.post = resp.data.post;
                 this.comments = resp.data.post.comments;
-                console.log(this.comments);
             }).catch(err => console.log(err));
         }
     }

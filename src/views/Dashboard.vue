@@ -168,6 +168,7 @@
                 return this.user.posts ? this.user.posts : [];
             },
             comments() {
+                console.log(this.user.comments);
                 return this.user.comments ? this.user.comments : [];
             },
             err () {
@@ -178,7 +179,6 @@
             getUser() {
                 this.$store.dispatch('get_user', this.dashboard ? this.user.name : this.$route.params.name).then(user => {
                     this.user = user;
-                    console.log(user);
                 }).catch(err => console.log(err));
             },
             uploadOpen() {
@@ -312,9 +312,8 @@
             }
         },
         mounted() {
-            // if (!this.dashboard) {
-                this.getUser();
-            // }
+            this.getUser();
+
             if ($('#adminNav:visible').length) {
                 $('.admin')[0].click();
             }

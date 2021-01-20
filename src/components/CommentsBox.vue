@@ -4,6 +4,7 @@
             <img :src="comment.user_img ? comment.user_img : require('../assets/user.jpg')" :alt="comment.user_name"
                 class="mx-0 d-block user-img p-0 col-2 col-md-1 rounded-circle">
             <div class="position-relative col-12  pb-3 pl-5 border radius bg-white comment">
+                <span>answer to {{comment.post_name}} by {{comment.post_author}}</span>
                 <h5 class="w-100 pl-5 text-bold">{{comment.user_name}}
                     <span class="text-secondary d-inline-block mr-3"
                         style="font-size: 0.9rem; float: right">{{comment.datetime}}</span> </h5>
@@ -67,10 +68,6 @@
                 }).catch(err => console.log(err));
             }
         },
-        mounted() {
-            console.log(this.current_user.id);
-            console.log(JSON.parse(localStorage.user).id);
-        }
     }
 </script>
 
