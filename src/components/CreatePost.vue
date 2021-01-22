@@ -17,31 +17,33 @@
           </div>
           <div class="modal-body">
             <form action="" method="POST" enctype="multipart/form-data">
-              <div class="form-group">
-                  <CatFilter :addCatOpt="true" :label="'Category'" :parentSelector="'#createModal'"/>
-              </div>
 
+              <div class="form-group">
+                 
+                <label for="post-img" class="img-label">
+                  <img :src="require('../assets/picture.png')" 
+                  class="w-100"
+                  alt="Upload image" title="Upload image">
+                   <input type="file" @change="readURL($event);" class="d-none" id="post-img" name="img" accept="image/*">
+                </label>
+              </div>
               <div class="form-group">
                 <label for=""></label>
                 <input type="text" v-model="heading" placeholder="Heading (optional)" class="form-control">
               </div>
               <div class="form-group">
-                <label for=""></label>
-                <textarea placeholder="Create post..." v-model="text" class="form-control" name="" id="" cols="30"
+                <label for="text"></label>
+                <textarea placeholder="Create post..." v-model="text" class="form-control" name="text" id="text" cols="30"
                   rows="10"></textarea>
               </div>
-              <div class="form-group">
-                <label for=""></label>
-                <input type="file" id="post-img" name="img" accept="image/*">
+                            <div class="form-group">
+                  <CatFilter :addCatOpt="true" :label="'Category'" :parentSelector="'#createModal'"/>
               </div>
               <div class="form-group">
-
-                  
-                 
                 <label for="tags"></label>
-                <textarea name="tags" id="tags" class="w-100 rounded my-2" placeholder="Add tags separated by spaces. 
-You ca also use #tags inside a post text.">
-
+                <textarea name="tags" id="tags" class="w-100 rounded my-2" 
+                placeholder="Add tags separated by spaces. 
+              You ca also use #tags inside a post text.">
             </textarea>
               </div>
             </form>
@@ -81,21 +83,27 @@ You ca also use #tags inside a post text.">
       },
     },
     methods: {
-      openCatInput () {
-
+      openImgInput (e) {
+        $(e.target).next('input').trigger('click');
       },
-      // async addCat(e) {
-      //   let val = $(e.target).prev('input').val();
-      //   if (val.length) {
-      //     let duplicates = this.$store.state.data.cats.filter(cat => cat.name === val);
-      //     if (!duplicates.length) {
-      //       let newCat = await this.$store.dispatch('add_cat', val);
-      //       console.log(newCat);
-      //     } else {
-      //       // handle duplicate (autoselect)
-      //     }
-      //   }
-      // },
+      readURL(e) {
+        let input = $(e.target)[0];
+        console.log($(input).closest('img'));
+        
+                if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+              console.log( e.target.result);
+                $(input).prev('img')
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+      },
       createPost() {
         let post = {
           heading: this.heading,
@@ -105,8 +113,7 @@ You ca also use #tags inside a post text.">
           user_id: this.user.id,
           user_name: this.user.name,
           user_image: this.user.image
-        }
-        console.log(post);
+        } 
         let words = post.text.split(' ');
         let tags = words.filter(word => word.indexOf('#') === 0);
         tags = words.forEach((word) => word = word.replace('#', ''));
@@ -127,5 +134,13 @@ You ca also use #tags inside a post text.">
     right: 25px;
     font-size: 2rem;
     padding: 0 15px;
+  }
+  .img-label {
+        height: auto;
+    max-height: 400px;
+    cursor: pointer;
+  }
+  .form-group {
+    margin-bottom: 0;
   }
 </style>

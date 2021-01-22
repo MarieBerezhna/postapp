@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row my-4 cats border radius py-2">
+        <div class="row cats border radius py-2">
             <input v-if=" this.parentSelector === '#createModal'" id="selected-cat" type="hidden"
                 :value="this.selectedCategories.length ? this.selectedCategories[0].id : 0">
             <div class="col-12 col-md-4 text-secondary ">{{ label }}</div>
@@ -13,6 +13,15 @@
             <div class="col-12">
                 <div class="dropdown col-12 col-md-8 offset-md-4">
                     <div id="filteredCats" class="dropdown-content radius">
+                        <a @click.prevent="showNewCatInput($event)" >
+                            <button v-if="addCatOpt" style="font-weight: bold;
+                                    height: 37px;
+                                    width: 37px;" title="Create a new category" type="button"
+                                class="trigger btn btn-primary rounded-circle"> + </button>
+                                Add new
+                        </a>
+
+
                         <a data-id=0
                             @click="selectCat($event)">{{ this.parentSelector === '#createModal' ? "Uncategorized" : "All" }}</a>
                         <a v-for="cat in this.filteredCategories" @click="selectCat($event)" :key="cat.id"
@@ -36,15 +45,15 @@
                             class="border border-secondary text-bold text-secondary bg-light radius py-1 px-2 ml-2">x</span>
                     </div>
                 </div>
-                                    <button v-if="addCatOpt" @click.prevent="showNewCatInput($event)" style="font-weight: bold;
-                                    height: 37px;
-                                    width: 37px;" title="Create a new category" type="button"
-                        class="trigger btn btn-primary rounded-circle"> + </button>
-                    <div  v-if="addCatOpt" class="row newCatInput" style="display: none">
-                        <input type="text" class="col-6 radius border px-3" placeholder="Type in new category name">
-                        <button @click.prevent="addCat($event)" class="col-5 offset-1 btn btn-warning">Add
-                            category</button>
+                <div class="row">
+                    <div v-if="addCatOpt" class="row newCatInput" style="display: none">
+                        <input type="text" class="col-7 ml-3 radius border px-1"
+                            placeholder="Type in new category name">
+                        <button @click.prevent="addCat($event)" class="col-3 offset-1 btn btn-warning">Add
+                        </button>
                     </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -101,19 +110,21 @@
                 this.selectedCategories = this.selectedCategories.filter(cat => cat.id !== parseInt(id));
             },
             showNewCatInput(e) {
-                console.log($(e.target).parent('#main'));
-                $(e.target).animate({
-                    deg: 45
-                }, {
-                    duration: 1200,
-                    step: function (now) {
-                        now = $('.newCatInput:visible').length ? -now : 0;
-                        $(this).css({
-                            transform: 'rotate(' + now + 'deg)'
-                        });
-                    }
-                });
-                $('.newCatInput:visible').length ? $('.newCatInput').slideUp() :  $('.newCatInput').slideDown();
+                console.log(e.target);
+                // $(e.target).animate({
+                //     deg: 45
+                // }, {
+                //     duration: 1200,
+                //     step: function (now) {
+                //         now = $('.newCatInput:visible').length ? -now : 0;
+                //         $(this).css({
+                //             transform: 'rotate(' + now + 'deg)'
+                //         });
+                //     }
+                // });
+                // $('.newCatInput:visible').length ? $('.newCatInput').slideUp() : $('.newCatInput').slideDown();
+
+                $('.newCatInput').slideDown();
             },
             async addCat(e) {
                 let val = $(e.target).prev('input').val().trim();
