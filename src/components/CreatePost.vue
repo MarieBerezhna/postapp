@@ -88,17 +88,13 @@
       },
       readURL(e) {
         let input = $(e.target)[0];
-        console.log($(input).closest('img'));
         
-                if (input.files && input.files[0]) {
+            if (input.files && input.files[0]) {
             var reader = new FileReader();
 
             reader.onload = function (e) {
-              console.log( e.target.result);
                 $(input).prev('img')
-                    .attr('src', e.target.result)
-                    .width(150)
-                    .height(200);
+                    .attr('src', e.target.result);
             };
 
             reader.readAsDataURL(input.files[0]);

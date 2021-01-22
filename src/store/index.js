@@ -132,13 +132,14 @@ const actions = {
         });
 
     },
-    add_cat: async ({ commit },cat, resolve) => {
+    add_cat: async ({ commit },cat) => {
 
         let result = await axios.post(`${apiBase}/categories/`, {name:cat});
         // to do : error handle
-        resolve(result);
-        commit('add_cat', result.data.data[0]);
-        return result.data.data[0];
+        // resolve(result);
+        console.log(result.data.data);
+        commit('add_cat', result.data.data);
+        return result.data.data;
     },
     rm_post({
         commit

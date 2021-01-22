@@ -111,30 +111,22 @@
             },
             showNewCatInput(e) {
                 console.log(e.target);
-                // $(e.target).animate({
-                //     deg: 45
-                // }, {
-                //     duration: 1200,
-                //     step: function (now) {
-                //         now = $('.newCatInput:visible').length ? -now : 0;
-                //         $(this).css({
-                //             transform: 'rotate(' + now + 'deg)'
-                //         });
-                //     }
-                // });
-                // $('.newCatInput:visible').length ? $('.newCatInput').slideUp() : $('.newCatInput').slideDown();
-
                 $('.newCatInput').slideDown();
             },
             async addCat(e) {
+               
                 let val = $(e.target).prev('input').val().trim();
+                val = val.split('');
+                console.log(val);
+                val[0] = val[0].toUpperCase();
+                val = val.join('');
                 if (val.length) {
                     let duplicates = this.$store.state.data.cats.filter(cat => cat.name === val);
                     if (!duplicates.length) {
                         let newCat = await this.$store.dispatch('add_cat', val);
-                        console.log(newCat);
+                        this.selectedCategories.push(newCat);
                     } else {
-                        // handle duplicate (autoselect)
+                        this.selectedCategories.push(duplicates[0]);
                     }
                 }
             },
