@@ -22,29 +22,24 @@
                  
                 <label for="post-img" class="img-label">
                   <img :src="require('../assets/picture.png')" 
-                  class="w-100"
+                  class="w-100" style="max-height: 430px;"
                   alt="Upload image" title="Upload image">
                    <input type="file" @change="readURL($event);" class="d-none" id="post-img" name="img" accept="image/*">
                 </label>
               </div>
               <div class="form-group">
                 <label for=""></label>
-                <input type="text" v-model="heading" placeholder="Heading (optional)" class="form-control">
+                <input type="text" v-model="heading" 
+                style="z-index:2000"
+                placeholder="Heading (optional)" class="form-control">
               </div>
               <div class="form-group">
                 <label for="text"></label>
-                <textarea placeholder="Create post..." v-model="text" class="form-control" name="text" id="text" cols="30"
+                <textarea @change="getTags($event.target.value )" placeholder="Create post..." v-model="text" class="form-control" name="text" id="text" cols="30"
                   rows="10"></textarea>
               </div>
-                            <div class="form-group">
+              <div class="form-group mt-1">
                   <CatFilter :addCatOpt="true" :label="'Category'" :parentSelector="'#createModal'"/>
-              </div>
-              <div class="form-group">
-                <label for="tags"></label>
-                <textarea name="tags" id="tags" class="w-100 rounded my-2" 
-                placeholder="Add tags separated by spaces. 
-              You ca also use #tags inside a post text.">
-            </textarea>
               </div>
             </form>
           </div>
@@ -83,6 +78,16 @@
       },
     },
     methods: {
+      getTags(text) {
+        let tags = [];
+        let words = text.split(' ');
+        words.forEach(word => {
+          if(word.indexOf('#') === 0) {
+            tags.push(word.replace('#', '')); 
+          }
+        });
+        return tags.join(' ');
+      },
       openImgInput (e) {
         $(e.target).next('input').trigger('click');
       },
@@ -101,21 +106,17 @@
         }
       },
       createPost() {
+      
         let post = {
           heading: this.heading,
           text: this.text,
           cat: $('#selected-cat').val(),
-          tags: $('#tags').val().split(' '),
+          tags: this.getTags(this.text),
           user_id: this.user.id,
           user_name: this.user.name,
           user_image: this.user.image
-        } 
-        let words = post.text.split(' ');
-        let tags = words.filter(word => word.indexOf('#') === 0);
-        tags = words.forEach((word) => word = word.replace('#', ''));
-        post.tags.concat(tags);
-        post.tags = post.tags.join(' ');
-
+        }
+        console.log(post);
         this.$store.dispatch('create_post', post)
           .catch(err => console.log(err))
       }

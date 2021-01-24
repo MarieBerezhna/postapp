@@ -121,6 +121,7 @@ const actions = {
             const file = document.getElementById('post-img').files[0];
             if (file) fd.append('pic', file);
             fd.append('post', JSON.stringify(post));
+            console.log(post);
             axios({
                 //url: `http://localhost:3000/api/posts/${post.user_id}`,
                 url: `${apiBase}/posts/${post.user_id}`,
@@ -135,9 +136,6 @@ const actions = {
     add_cat: async ({ commit },cat) => {
 
         let result = await axios.post(`${apiBase}/categories/`, {name:cat});
-        // to do : error handle
-        // resolve(result);
-        console.log(result.data.data);
         commit('add_cat', result.data.data);
         return result.data.data;
     },
@@ -357,6 +355,7 @@ const mutations = {
     },
     get_post() {},
     new_post(state, post) {
+        post.user_image = JSON.parse(localStorage.user).image;
         post.image = completePostPic(post.user_id,post.image);
         state.data.posts.push(post);
     },
