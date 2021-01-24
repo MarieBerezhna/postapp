@@ -1,12 +1,10 @@
 <template>
-    <div class="post-inner bg-light radius pb-3">
-        <a :href="`/post${post.id}`">
-            <h3 class="p-3  my-0 bg-warning text-bold post-heading text-center">{{post.heading}}</h3>
-        </a>
+    <div class="post-inner bg-light radius-top pb-3">
             <div class="row">
                 <div class="col-12 p-0">
                      <a :href="`/post${post.id}`">
-                    <img v-if="post.image" :src="post.image" :alt="post.tags" width="100%" class="rounded">
+                    <img v-if="post.image" :src="post.image" :alt="post.tags" width="100%" class="radius-top">
+                    <h3 :class="[post.image? '' : 'radius-top']" class="p-3  my-0 bg-warning text-bold post-heading text-center">{{post.heading}}</h3>
                     </a>
                     <div class="meta px-3 border-bottom row">
                         <a :href="'/user/' + post.user_name" class="col-4">

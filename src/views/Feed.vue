@@ -5,7 +5,7 @@
         <FilterBody/>
       </div>
       <div class="col-12 col-md-7">
-        <div v-for='post in posts' :key='post.id' class="border my-4 post" :data-category="post.cat"
+        <div v-for='post in posts' :key='post.id' class="border radius-top my-4 post" :data-category="post.cat"
           :data-id="post.id">
           <SinglePost :post="post"/>
         </div>

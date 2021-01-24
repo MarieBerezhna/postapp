@@ -90,11 +90,11 @@ input:focus, button:focus {
   background-color: $yellow;
 }
 
-.post-inner > a {
+.post-inner  a {
     color: rgb(24, 15, 15);
     text-decoration: none;
 }
-.post-inner > a:hover {
+.post-inner  a:hover {
     color: rgb(80, 46, 46);
     text-decoration: none;
 }
@@ -105,12 +105,8 @@ input:focus, button:focus {
         width: 50px;
         border: 1px solid $yellow;
     }
-    .post, .post-heading {
-        border-top-left-radius: 30px;
-        border-top-right-radius: 30px;
-    }
     .post, .post-inner {
-              border-bottom-left-radius: 30px;
+        border-bottom-left-radius: 30px;
         border-bottom-right-radius: 30px;
     }
     .btn {
@@ -120,11 +116,11 @@ input:focus, button:focus {
       border-radius: 30px;
     }
     .radius-top {
-              border-top-left-radius: 30px;
+        border-top-left-radius: 30px;
         border-top-right-radius: 30px;
     }
     .radius-bottom {
-                    border-bottom-left-radius: 30px;
+        border-bottom-left-radius: 30px;
         border-bottom-right-radius: 30px;
     }
 </style>
