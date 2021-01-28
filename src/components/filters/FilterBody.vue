@@ -8,12 +8,12 @@
             <div class="row my-2 sort border radius py-2">
                 <div class="col-12 col-md-2 text-secondary "> Sort:</div>
                 <div class="col-6 offset-1 px-0">
-                    <div class="btn border px-3 btn-info" @click="sort($event)">
+                    <div class="btn border px-3 btn-info" @click="sort($event, 'pop')">
                         Most Popular
                     </div>
                 </div>
                 <div class="col-3 px-0">
-                    <div class="btn px-3 border" @click="sort($event)">
+                    <div class="btn px-3 border" @click="sort($event, 'date')">
                         Latest
                     </div>
                 </div>
@@ -28,29 +28,6 @@
                         placeholder="Search tags" @blur="hideDropdown('.tags .dropdown-content')"
                         class="radius border w-100">
                 </div>
-                <!-- <div class="col-12">
-                    <div class="dropdown col-12 col-md-8 offset-md-4">
-                        <div id="filteredCats" class="dropdown-content radius">
-                            <a data-id=0 @click="selectCat($event)">All</a>
-                            <a v-for="cat in this.filteredCategories" @click="selectCat($event)" :key="cat.id"
-                                :data-id="cat.id">{{ cat.name }}</a>
-                        </div>
-                    </div>
-
-                    <div v-if="!this.selectedCategories.length">
-                        <div class="cat-selected  d-inline-block btn btn-secondary mx-1 my-2">
-                            All
-                        </div>
-                    </div>
-                    <div v-else class="selectedCats">
-                        <div v-for="cat in this.selectedCategories" :key="cat.id" :data-id="cat.id"
-                            class="cat-selected d-inline-block btn btn-secondary mx-1 pr-0 my-2">
-                            {{cat.name}}
-                            <span @click="unselectCat($event)"
-                                class="border border-secondary text-bold text-secondary bg-light radius py-1 px-2 ml-2">x</span>
-                        </div>
-                    </div>
-                </div> -->
             </div>
         </div>
     </div>
@@ -74,9 +51,14 @@
                     $(filters).removeClass('d-none');
                 }
             },
-            sort(e) {
+            sort(e, param) {
                 $('.sort .btn-info').removeClass('btn-info');
                 $(e.target).addClass('btn-info');
+                if (param === 'date') {
+                   this.$store.commit('sort_by_date');
+                } else {
+                    this.$store.commit('sort_by_pop');
+                }
             },
         }
     }

@@ -18,7 +18,6 @@ const proceed_login = (commit, resp, resolve, reject) => {
         if (user.image) {
             user.image = completeAvatar(user.id, user.image);
         }
-        console.log(user);
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
         axios.defaults.headers.common.Authorization = token;
@@ -66,6 +65,7 @@ const actions = {
                     let data = response.data.data;
                     data.comments.forEach(c => c.user_img = completeAvatar(c.user_id, c.user_img));
                     commit('SET_DATA', data);
+                    commit('sort_by_pop');
                 } else {
                     console.log('Server fault');
                 }
@@ -348,10 +348,13 @@ const mutations = {
     SET_DATA(state, data) {
         for (var i = 0; i < data.posts.length; i++) {
             let post = data.posts[i];
+            let darr = post.datetime.split('T');
+            post.date = darr[0];
             post.image = completePostPic(post.user_id, post.image);
             post.user_image = completeAvatar(post.user_id, post.user_image);
         }
         state.data = data;
+       
     },
     get_post() {},
     new_post(state, post) {
@@ -393,7 +396,6 @@ const mutations = {
         state.user = data.user;
     },
     auth_error(state, resp) {
-        console.log(resp);
         state.authStatus = 'error';
         localStorage.removeItem('user');
         localStorage.removeItem('token');
@@ -405,6 +407,12 @@ const mutations = {
         state.authStatus = '';
         state.token = '';
     },
+    sort_by_date(state) {
+        state.data.posts.sort((a, b) => a.date - b.date);
+    },
+    sort_by_pop(state) {
+        state.data.posts.sort((a, b) => a.views - b.views);
+    }
 };
 
 //export store module

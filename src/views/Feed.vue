@@ -7,7 +7,7 @@
       <div class="col-12 col-md-7">
         <div v-for='post in posts' :key='post.id' class="border radius-top my-4 post" :data-category="post.cat"
           :data-id="post.id">
-          <SinglePost :post="post"/>
+          <SinglePost class="single-post" :post="post"/>
         </div>
       </div>
     </div>
@@ -28,10 +28,11 @@
     computed: {
       posts() {
         let posts = this.$store.state.data.posts;
-        return posts ? posts.reverse() : [];
+        posts = posts ? posts.sort((a, b) => a.datetime - b.datetime).reverse() : [];
+         return posts;
       },
 
-    }
+    },
   }
 </script>
 <style scoped>
