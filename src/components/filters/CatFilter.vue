@@ -97,8 +97,12 @@
                 if (id !== "0") {
                     let cat = this.categories.filter(cat => cat.id === parseInt(id))[0];
                     if (this.selectedCategories.indexOf(cat) === -1) {
-                        if (this.parentSelector === '#createModal') this.selectedCategories = [];
-                        this.selectedCategories.push(cat);
+                        if (this.parentSelector === '#createModal') {
+                            this.selectedCategories = [cat]; 
+                        } else {
+                            this.selectedCategories.push(cat);
+                            this.feedFilterByCat();
+                        }      
                     }
                 } else {
                     this.selectedCategories = [];
@@ -108,6 +112,20 @@
             unselectCat(e) {
                 let id = $(e.target).parent().attr('data-id');
                 this.selectedCategories = this.selectedCategories.filter(cat => cat.id !== parseInt(id));
+            },
+            feedFilterByCat () {
+                let ids = [];
+    
+                this.selectedCategories.map(cat => ids.push(cat.id));
+                
+                let postEls = $('.post').toArray();
+                $('.post').show()
+                postEls.forEach(el => {
+                    let elCat = $(el).attr('data-category');
+                    if (ids.indexOf(parseInt(elCat)) === -1) {
+                        ids.length ? $(el).hide() : $(el).show()
+                    }
+                })
             },
             showNewCatInput(e) {
                 console.log(e.target);
